@@ -1,0 +1,25 @@
+{
+  "type": "kaleidoscope_cookery:pot",
+  "carrier": {
+    "item": "minecraft:bowl"
+  },
+  "ingredients": [
+    {
+      "item": "kaleidoscope_sculk:ancient_bone_fragment"
+    },
+    {
+      "item": "kaleidoscope_sculk:ancient_bone_fragment"
+    },
+    {
+      "item": "kaleidoscope_sculk:ancient_bone_fragment"
+    },
+    {
+      "item": "kaleidoscope_sculk:ancient_bone_fragment"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "kaleidoscope_sculk:ancient_brittle_bone_fragments"
+  },
+  "stir_fry_count": 6
+}

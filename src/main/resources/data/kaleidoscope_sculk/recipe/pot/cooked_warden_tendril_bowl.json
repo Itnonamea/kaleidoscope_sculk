@@ -1,0 +1,19 @@
+{
+  "type": "kaleidoscope_cookery:pot",
+  "carrier": {
+    "item": "minecraft:bowl"
+  },
+  "ingredients": [
+    {
+      "item": "kaleidoscope_sculk:warden_tendril"
+    },
+    {
+      "item": "kaleidoscope_sculk:warden_tendril"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "kaleidoscope_sculk:cooked_warden_tendril_bowl"
+  },
+  "stir_fry_count": 6
+}
