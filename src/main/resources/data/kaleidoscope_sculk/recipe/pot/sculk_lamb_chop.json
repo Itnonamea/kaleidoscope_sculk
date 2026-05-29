@@ -5,13 +5,13 @@
   },
   "ingredients": [
     {
-      "item": "minecraft:amethyst_shard"
+      "item": "kaleidoscope_sculk:sculk_fungus"
     },
     {
-      "item": "minecraft:amethyst_shard"
+      "item": "kaleidoscope_sculk:sculk_fungus"
     },
     {
-      "item": "minecraft:amethyst_shard"
+      "item": "kaleidoscope_sculk:sculk_fungus"
     },
     {
       "tag": "c:foods/raw_mutton"
@@ -25,6 +25,7 @@
   ],
   "result": {
     "count": 1,
-    "id": "kaleidoscope_cookery:crystal_lamb_chop"
-  }
+    "id": "kaleidoscope_sculk:sculk_lamb_chop"
+  },
+  "stir_fry_count": 3
 }

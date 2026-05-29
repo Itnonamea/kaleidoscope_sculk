@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "bites=0,facing=east": {
+      "model": "kaleidoscope_sculk:block/sculk_chicken_stew_block/sculk_chicken_stew_block",
+      "y": 90
+    },
+    "bites=0,facing=north": {
+      "model": "kaleidoscope_sculk:block/sculk_chicken_stew_block/sculk_chicken_stew_block"
+    },
+    "bites=0,facing=south": {
+      "model": "kaleidoscope_sculk:block/sculk_chicken_stew_block/sculk_chicken_stew_block",
+      "y": 180
+    },
+    "bites=0,facing=west": {
+      "model": "kaleidoscope_sculk:block/sculk_chicken_stew_block/sculk_chicken_stew_block",
+      "y": 270
+    },
+    "bites=1,facing=east": {
+      "model": "kaleidoscope_sculk:block/sculk_chicken_stew_block/sculk_chicken_stew_block_bite1",
+      "y": 90
+    },
+    "bites=1,facing=north": {
+      "model": "kaleidoscope_sculk:block/sculk_chicken_stew_block/sculk_chicken_stew_block_bite1"
+    },
+    "bites=1,facing=south": {
+      "model": "kaleidoscope_sculk:block/sculk_chicken_stew_block/sculk_chicken_stew_block_bite1",
+      "y": 180
+    },
+    "bites=1,facing=west": {
+      "model": "kaleidoscope_sculk:block/sculk_chicken_stew_block/sculk_chicken_stew_block_bite1",
+      "y": 270
+    },
+    "bites=2,facing=east": {
+      "model": "kaleidoscope_sculk:block/sculk_chicken_stew_block/sculk_chicken_stew_block_bite2",
+      "y": 90
+    },
+    "bites=2,facing=north": {
+      "model": "kaleidoscope_sculk:block/sculk_chicken_stew_block/sculk_chicken_stew_block_bite2"
+    },
+    "bites=2,facing=south": {
+      "model": "kaleidoscope_sculk:block/sculk_chicken_stew_block/sculk_chicken_stew_block_bite2",
+      "y": 180
+    },
+    "bites=2,facing=west": {
+      "model": "kaleidoscope_sculk:block/sculk_chicken_stew_block/sculk_chicken_stew_block_bite2",
+      "y": 270
+    },
+    "bites=3,facing=east": {
+      "model": "kaleidoscope_sculk:block/fungus_pot",
+      "y": 90
+    },
+    "bites=3,facing=north": {
+      "model": "kaleidoscope_sculk:block/fungus_pot"
+    },
+    "bites=3,facing=south": {
+      "model": "kaleidoscope_sculk:block/fungus_pot",
+      "y": 180
+    },
+    "bites=3,facing=west": {
+      "model": "kaleidoscope_sculk:block/fungus_pot",
+      "y": 270
+    }
+  }
+}

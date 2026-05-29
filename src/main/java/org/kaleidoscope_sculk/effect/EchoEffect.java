@@ -2,15 +2,21 @@ package org.kaleidoscope_sculk.effect;
 
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.LivingEntity;
 
-public class DepthEffect extends MobEffect {
+public class EchoEffect extends MobEffect {
 
-    public DepthEffect() {
+    public EchoEffect() {
         super(MobEffectCategory.BENEFICIAL, 0x66CCFF);
     }
 
     @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-        return false; // 不需要每 tick 处理，由客户端渲染器处理
+        return true;
+    }
+
+    @Override
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
+        return true;
     }
 }

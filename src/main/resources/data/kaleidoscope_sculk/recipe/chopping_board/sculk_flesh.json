@@ -1,12 +1,12 @@
 {
   "type": "kaleidoscope_cookery:chopping_board",
-  "cut_count": 4,
+  "cut_count": 2,
   "ingredient": {
-    "item": "minecraft:chicken"
+    "item": "kaleidoscope_sculk:sculk_pinapple"
   },
-  "model_id": "kaleidoscope_cookery:raw_chicken",
+  "model_id": "kaleidoscope_sculk:sculk_flesh",
   "result": {
-    "count": 2,
-    "id": "kaleidoscope_cookery:raw_cut_small_meats"
+    "count": 3,
+    "id": "kaleidoscope_sculk:sculk_flesh"
   }
 }

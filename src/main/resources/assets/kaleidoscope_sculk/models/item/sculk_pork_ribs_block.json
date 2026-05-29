@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "kaleidoscope_sculk:item/sculk_pork_ribs_block"
+  }
+}

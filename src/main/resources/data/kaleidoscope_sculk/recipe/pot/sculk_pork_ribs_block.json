@@ -5,15 +5,30 @@
   },
   "ingredients": [
     {
-      "item": "kaleidoscope_sculk:warden_tendril"
+      "item": "kaleidoscope_sculk:eerie_meat"
     },
     {
-      "item": "kaleidoscope_sculk:warden_tendril"
+      "item": "kaleidoscope_sculk:eerie_meat"
+    },
+    {
+      "item": "kaleidoscope_sculk:eerie_meat"
+    },
+    {
+      "item": "kaleidoscope_sculk:ancient_bone_fragment"
+    },
+    {
+      "item": "kaleidoscope_sculk:ancient_bone_fragment"
+    },
+    {
+      "item": "kaleidoscope_sculk:ancient_bone_fragment"
+    },
+    {
+      "item": "kaleidoscope_sculk:ancient_bone_fragment"
     }
   ],
   "result": {
     "count": 1,
-    "id": "kaleidoscope_sculk:cooked_warden_tendril_bowl"
+    "id": "kaleidoscope_sculk:sculk_pork_ribs_block"
   },
   "stir_fry_count": 6
 }

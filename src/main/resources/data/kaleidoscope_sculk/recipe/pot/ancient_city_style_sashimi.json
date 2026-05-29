@@ -5,21 +5,27 @@
   },
   "ingredients": [
     {
-      "item": "kaleidoscope_sculk:ancient_bone_fragment"
+      "tag": "c:foods/tropical_fish"
     },
     {
-      "item": "kaleidoscope_sculk:ancient_bone_fragment"
+      "tag": "c:foods/tropical_fish"
     },
     {
-      "item": "kaleidoscope_sculk:ancient_bone_fragment"
+      "tag": "c:foods/tropical_fish"
     },
     {
-      "item": "kaleidoscope_sculk:ancient_bone_fragment"
+      "tag": "c:foods/tropical_fish"
+    },
+    {
+      "item": "minecraft:red_candle"
+    },
+    {
+      "item": "minecraft:sculk_shrieker"
     }
   ],
   "result": {
     "count": 1,
-    "id": "kaleidoscope_sculk:ancient_brittle_bone_fragments"
+    "id": "kaleidoscope_sculk:ancient_city_style_sashimi"
   },
-  "stir_fry_count": 6
+  "stir_fry_count": 3
 }

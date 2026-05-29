@@ -4,9 +4,9 @@
   "ingredient": {
     "item": "minecraft:sculk"
   },
-  "model_id": "kaleidoscope_cookery:sculk_fungus",
+  "model_id": "kaleidoscope_sculk:sculk_fungus",
   "result": {
-    "count": 3,
+    "count": 4,
     "id": "kaleidoscope_sculk:sculk_fungus"
   }
 }

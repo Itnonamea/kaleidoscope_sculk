@@ -11,7 +11,7 @@ import org.kaleidoscope_sculk.Kaleidoscope_sculk;
 
 import java.util.concurrent.CompletableFuture;
 
-@EventBusSubscriber(modid = Kaleidoscope_sculk.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Kaleidoscope_sculk.MODID)
 public class DataGenerators {
 
     @SubscribeEvent
@@ -21,16 +21,16 @@ public class DataGenerators {
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-        // 注册语言文件生成器
-        generator.addProvider(true, new ModLanguageProvider(output));
+        // 语言文件
+        generator.addProvider(true, new ModLanguageProvider(output, "en_us"));
+        generator.addProvider(true, new ModLanguageProvider(output, "zh_cn"));
 
-        // 注册物品模型生成器
+        // 物品模型
         generator.addProvider(true, new ModItemModelProvider(output, existingFileHelper));
 
-        // 注册配方生成器
-        generator.addProvider(true, new ModRecipeProvider(output, lookupProvider));
+        // 战利品表
+        generator.addProvider(true, ModLootTableProvider.create(output, lookupProvider));
 
-        // 注册标签生成器（可选）
-        generator.addProvider(true, new ModItemTagsProvider(output, lookupProvider, existingFileHelper));
+        generator.addProvider(true, new ModRecipeProvider(output, lookupProvider));
     }
 }

@@ -1,4 +1,4 @@
-package org.kaleidoscope_sculk.dropsHandler;
+package org.kaleidoscope_sculk.handler;
 
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.warden.Warden;
@@ -6,7 +6,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import org.kaleidoscope_sculk.Kaleidoscope_sculk;
-import org.kaleidoscope_sculk.ModItems;
+import org.kaleidoscope_sculk.register.ModItems;
 
 import java.util.Random;
 
@@ -17,11 +17,10 @@ public class WardenDropsHandler {
 
     @SubscribeEvent
     public static void onLivingDrops(LivingDropsEvent event) {
-        if (!(event.getEntity() instanceof Warden)) {
+        if (!(event.getEntity() instanceof Warden warden)) {
             return;
         }
 
-        Warden warden = (Warden) event.getEntity();
         int dropCount = 1 + RANDOM.nextInt(2); // 1~2个
 
         for (int i = 0; i < dropCount; i++) {

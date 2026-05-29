@@ -4,7 +4,8 @@
 	"render_type": "minecraft:cutout",
 	"texture_size": [32, 32],
 	"textures": {
-		"3": "kaleidoscope_sculk:block/ancient_city_style_sashimi"
+		"3": "kaleidoscope_sculk:block/ancient_city_style_sashimi",
+      "particle": "kaleidoscope_sculk:block/plate_break"
 	},
 	"elements": [
 		{

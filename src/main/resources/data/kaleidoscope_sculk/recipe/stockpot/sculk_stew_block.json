@@ -1,0 +1,30 @@
+{
+  "type": "kaleidoscope_cookery:stockpot",
+  "carrier": {
+    "item": "minecraft:flower_pot"
+  },
+  "ingredients": [
+    {
+      "item": "kaleidoscope_sculk:sculk_fungus"
+    },
+    {
+      "item": "kaleidoscope_sculk:sculk_fungus"
+    },
+    {
+      "item": "kaleidoscope_sculk:sculk_fungus"
+    },
+    {
+      "tag": "c:vegetables"
+    },
+    {
+      "tag": "c:vegetables"
+    },
+    {
+      "tag": "c:raw_meats"
+    }
+  ],
+  "result": {
+    "count": 3,
+    "id": "kaleidoscope_sculk:sculk_stew_block"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "kaleidoscope_cookery:pot",
+  "ingredients": [
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "kaleidoscope_sculk:sculk_dough"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "kaleidoscope_sculk:soul_pancake"
+  },
+  "stir_fry_count": 4
+}

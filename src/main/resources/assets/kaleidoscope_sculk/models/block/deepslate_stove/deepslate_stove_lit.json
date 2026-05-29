@@ -1,0 +1,25 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"top": "kaleidoscope_sculk:block/deepslate_stove/deepslate_stove_top_lit",
+		"side": "kaleidoscope_sculk:block/deepslate_stove/deepslate_stove_side",
+		"front": "kaleidoscope_sculk:block/deepslate_stove/deepslate_stove_front_lit",
+      "particle": "kaleidoscope_sculk:block/deepslate_stove/deepslate_stove_front_lit"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#front"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#side"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#side"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#side"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#top"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "down"}
+			}
+		}
+	]
+}

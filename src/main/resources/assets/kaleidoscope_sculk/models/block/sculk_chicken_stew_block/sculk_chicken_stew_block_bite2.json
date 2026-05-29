@@ -5,7 +5,7 @@
 	"texture_size": [32, 32],
 	"textures": {
 		"0": "kaleidoscope_sculk:block/sculk_chicken_stew_block",
-		"particle": "kaleidoscope_sculk:block/sculk_chicken_stew_block"
+		"particle": "kaleidoscope_sculk:block/pot_break"
 	},
 	"elements": [
 		{
