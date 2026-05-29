@@ -21,8 +21,7 @@ import java.util.List;
 
 public class SilentKitchenKnife extends SwordItem {
 
-    // 基础攻击伤害和攻速
-    private static final float ATTACK_DAMAGE = 5.0f;  // 总伤害 = 工具基础伤害 + 此值
+    private static final float ATTACK_DAMAGE = 5.0f;
     private static final float ATTACK_SPEED = -2.2f;
 
     public SilentKitchenKnife() {

@@ -20,9 +20,7 @@ public class ClientSonicHandler {
 
         boolean pressed = KeyBindings.sonicBoomKey.isDown();
 
-        // 按键按下瞬间触发
         if (pressed && !lastPressed) {
-            // 必须空手才能发射
             if (mc.player.getMainHandItem().isEmpty()) {
                 PacketDistributor.sendToServer(new SonicBoomPacket());
             }

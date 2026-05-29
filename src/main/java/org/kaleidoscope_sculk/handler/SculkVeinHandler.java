@@ -37,9 +37,8 @@ public class SculkVeinHandler {
         Level level = event.getLevel();
         BlockPos pos = event.getPos();
         BlockState state = level.getBlockState(pos);
-        InteractionHand hand = event.getHand();  // 获取手部
+        InteractionHand hand = event.getHand();
 
-        // 判断是否手持厨刀
         boolean isKnife = handItem.is(ModItems.EROSION_KITCHEN_KNIFE.get()) ||
                 handItem.is(ModItems.SILENT_KITCHEN_KNIFE.get());
 

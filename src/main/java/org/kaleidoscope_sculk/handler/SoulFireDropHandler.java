@@ -25,9 +25,7 @@ public class SoulFireDropHandler {
         Level level = (Level) event.getLevel();
         BlockPos pos = event.getPos();
 
-        // 检查是否是灵魂火
         if (state.is(Blocks.SOUL_FIRE)) {
-            // 3% 几率掉落灵魂
             if (RANDOM.nextFloat() < DROP_CHANCE) {
                 if (!level.isClientSide) {
                     ItemEntity drop = new ItemEntity(

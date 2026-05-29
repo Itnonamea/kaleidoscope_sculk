@@ -26,7 +26,6 @@ public class Kaleidoscope_sculk {
         ModPotions.POTIONS.register(modEventBus);
         ModDataComponents.DATA_COMPONENTS.register(modEventBus);
 
-        // 注册网络
         modEventBus.addListener(this::registerPayloads);
     }
 

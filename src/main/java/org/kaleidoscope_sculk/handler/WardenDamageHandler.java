@@ -17,16 +17,14 @@ import java.util.UUID;
 @EventBusSubscriber(modid = Kaleidoscope_sculk.MODID)
 public class WardenDamageHandler {
 
-    // 记录每个坚守者已累积的伤害（UUID -> 累积伤害）
     private static final Map<UUID, Float> ACCUMULATED_DAMAGE = new HashMap<>();
-    private static final int DAMAGE_PER_DROP = 10;  // 每10点伤害掉落一个
-    private static final int MAX_DROPS = 5;         // 最多掉落5个
+    private static final int DAMAGE_PER_DROP = 10;
+    private static final int MAX_DROPS = 5;
 
     @SubscribeEvent
     public static void onWardenDamage(LivingDamageEvent.Post event) {
         Entity entity = event.getEntity();
 
-        // 只处理坚守者
         if (!(entity instanceof Warden warden)) return;
 
         float damage = event.getNewDamage();
@@ -36,18 +34,15 @@ public class WardenDamageHandler {
         float currentDamage = ACCUMULATED_DAMAGE.getOrDefault(uuid, 0f);
         float newDamage = currentDamage + damage;
 
-        // 计算本次应该掉落的数量
         int totalDrops = (int) (newDamage / DAMAGE_PER_DROP);
         int previousDrops = (int) (currentDamage / DAMAGE_PER_DROP);
         int dropsToAdd = Math.min(totalDrops - previousDrops, MAX_DROPS - previousDrops);
 
-        // 限制最多5个
         if (previousDrops >= MAX_DROPS) {
             ACCUMULATED_DAMAGE.remove(uuid);
             return;
         }
 
-        // 掉落物品
         if (dropsToAdd > 0) {
             for (int i = 0; i < dropsToAdd; i++) {
                 ItemStack fragment = new ItemStack(ModItems.ANCIENT_BONE_FRAGMENT.get());
@@ -63,7 +58,6 @@ public class WardenDamageHandler {
             }
         }
 
-        // 更新累积伤害
         if (totalDrops >= MAX_DROPS) {
             ACCUMULATED_DAMAGE.remove(uuid);
         } else {
@@ -71,7 +65,6 @@ public class WardenDamageHandler {
         }
     }
 
-    // 坚守者死亡时清除记录
     @SubscribeEvent
     public static void onWardenDeath(net.neoforged.neoforge.event.entity.living.LivingDeathEvent event) {
         if (event.getEntity() instanceof Warden warden) {

@@ -21,16 +21,10 @@ public class DataGenerators {
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-        // 语言文件
         generator.addProvider(true, new ModLanguageProvider(output, "en_us"));
         generator.addProvider(true, new ModLanguageProvider(output, "zh_cn"));
-
-        // 物品模型
         generator.addProvider(true, new ModItemModelProvider(output, existingFileHelper));
-
-        // 战利品表
         generator.addProvider(true, ModLootTableProvider.create(output, lookupProvider));
-
         generator.addProvider(true, new ModRecipeProvider(output, lookupProvider));
     }
 }

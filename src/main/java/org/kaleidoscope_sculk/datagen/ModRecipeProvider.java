@@ -81,7 +81,6 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_eerie_meat", has(ModItems.EERIE_MEAT.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(Kaleidoscope_sculk.MODID, "cooked_eerie_meat_campfire"));
 
-// 锻造台配方：静匿升级模板 + 侵蚀菜刀 = 静匿菜刀
         SmithingTransformRecipeBuilder.smithing(
                         Ingredient.of(ModItems.SILENT_UPGRADE_SMITHING_TEMPLATE.get()),
                         Ingredient.of(ModItems.EROSION_KITCHEN_KNIFE.get()),
@@ -93,7 +92,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlocks("has_erosion_knife", has(ModItems.EROSION_KITCHEN_KNIFE.get()))
                 .unlocks("has_sculk_shrieker", has(Blocks.SCULK_SHRIEKER))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(Kaleidoscope_sculk.MODID, "silent_knife_smithing"));
-        // ==================== 静匿升级模板配方 ====================
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.SILENT_UPGRADE_SMITHING_TEMPLATE.get(), 1)
                 .pattern("WBW")
                 .define('W', ModItems.WARDEN_TENDRIL.get())

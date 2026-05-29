@@ -43,7 +43,6 @@ public record SonicBoomPacket() implements CustomPacketPayload {
     public void handle(IPayloadContext context) {
         context.enqueueWork(() -> {
             ServerPlayer player = (ServerPlayer) context.player();
-            // 服务端检查：有声波效果 + 空手
             if (player.hasEffect(ModEffects.SONIC_WAVE.getDelegate()) && player.getMainHandItem().isEmpty()) {
                 shootSonicWave(player);
             }

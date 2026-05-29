@@ -47,9 +47,7 @@ public class SculkDashEffect extends MobEffect {
         if (isInSculkBiome) {
             double speedBonus = 0.3 * (amplifier + 1);
 
-            // 移除旧的修饰符
             attributeInstance.removeModifier(modifierId);
-            // 添加新的修饰符
             attributeInstance.addTransientModifier(
                     new AttributeModifier(
                             modifierId,
@@ -58,7 +56,6 @@ public class SculkDashEffect extends MobEffect {
                     )
             );
         } else {
-            // 不在幽匿群系时，移除修饰符
             attributeInstance.removeModifier(modifierId);
         }
 
@@ -71,10 +68,8 @@ public class SculkDashEffect extends MobEffect {
     private boolean isInSculkBiome(Level level, BlockPos pos) {
         var biome = level.getBiome(pos);
 
-        // 检查自定义标签
         if (biome.is(SCULK_BIOMES)) return true;
 
-        // 检查深暗之域
         return biome.is(Biomes.DEEP_DARK);
     }
 }
