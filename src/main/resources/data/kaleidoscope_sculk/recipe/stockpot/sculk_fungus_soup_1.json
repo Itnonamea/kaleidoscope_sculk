@@ -1,0 +1,16 @@
+{
+  "type": "kaleidoscope_cookery:stockpot",
+  "ingredients": [
+    {
+      "item": "kaleidoscope_sculk:sculk_fungus"
+    },
+    {
+      "item": "kaleidoscope_sculk:sculk_fungus"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "kaleidoscope_sculk:sculk_fungus_soup"
+  },
+  "soup_base": "minecraft:water"
+}

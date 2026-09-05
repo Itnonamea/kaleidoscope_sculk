@@ -1,0 +1,14 @@
+{
+  "type": "kaleidoscope_tavern:barrel",
+  "carrier": {
+    "item": "kaleidoscope_tavern:empty_bottle"
+  },
+  "fluid": "kaleidoscope_sculk:sculk_juice",
+  "ingredients": [
+    { "item": "minecraft:sculk" }
+  ],
+  "result": {
+    "count": 1,
+    "id": "kaleidoscope_sculk:sculk_brew"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "kaleidoscope_cookery:stockpot",
+  "carrier": {
+    "item": "minecraft:bowl"
+  },
+  "ingredients": [
+    {
+      "item": "kaleidoscope_sculk:sculk_flesh"
+    },
+    {
+      "item": "kaleidoscope_sculk:sculk_flesh"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "kaleidoscope_sculk:boil_sculk_pinapple"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "bites=0": {
+      "model": "kaleidoscope_sculk:block/deepslate_cake/deepslate_cake"
+    },
+    "bites=1": {
+      "model": "kaleidoscope_sculk:block/deepslate_cake/deepslate_cake_bite1"
+    },
+    "bites=2": {
+      "model": "kaleidoscope_sculk:block/deepslate_cake/deepslate_cake_bite2"
+    },
+    "bites=3": {
+      "model": "kaleidoscope_sculk:block/deepslate_cake/deepslate_cake_bite3"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "count=1,facing=north,waterlogged=false": { "model": "kaleidoscope_sculk:block/sculk_brew_bottle" },
+    "count=1,facing=south,waterlogged=false": { "model": "kaleidoscope_sculk:block/sculk_brew_bottle", "y": 180 },
+    "count=1,facing=west,waterlogged=false": { "model": "kaleidoscope_sculk:block/sculk_brew_bottle", "y": 270 },
+    "count=1,facing=east,waterlogged=false": { "model": "kaleidoscope_sculk:block/sculk_brew_bottle", "y": 90 }
+  }
+}

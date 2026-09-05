@@ -20,7 +20,7 @@ public class WardenVibrationUserMixin {
                                        Context context, CallbackInfoReturnable<Boolean> cir) {
         // 检查事件来源实体
         if (context.sourceEntity() instanceof LivingEntity livingEntity) {
-            // 如果来源实体有 Echo 效果，坚守者不接收振动
+            // 如果来源实体有 Echo 效果，监守者不接收振动
             if (livingEntity.hasEffect(ModEffects.ECHO.getDelegate())) {
                 cir.setReturnValue(false);
             }

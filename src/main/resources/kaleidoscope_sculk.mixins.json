@@ -8,6 +8,7 @@
     "WardenVibrationUserMixin"
   ],
   "client": [
+    "BannerRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

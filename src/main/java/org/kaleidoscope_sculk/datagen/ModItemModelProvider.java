@@ -2,6 +2,7 @@ package org.kaleidoscope_sculk.datagen;
 
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.kaleidoscope_sculk.Kaleidoscope_sculk;
 import org.kaleidoscope_sculk.register.ModItems;
@@ -35,6 +36,10 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.SILENT_UPGRADE_SMITHING_TEMPLATE.get());
         basicItem(ModItems.ANCIENT_CITY_STYLE_SASHIMI.get());
         basicItem(ModItems.SCULK_LAMB_CHOP.get());
+        basicItem(ModItems.HUADIAO_JIU.get());
+
+//        getBuilder("soul_sail")
+//                .parent(new ModelFile.UncheckedModelFile("builtin/entity"));
 
     }
 }

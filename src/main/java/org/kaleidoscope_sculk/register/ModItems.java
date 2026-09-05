@@ -21,6 +21,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import org.kaleidoscope_sculk.Kaleidoscope_sculk;
 import org.kaleidoscope_sculk.item.*;
 
+import java.util.function.Supplier;
+
 
 public class ModItems {
 
@@ -72,7 +74,7 @@ public class ModItems {
                         output.accept(ModItems.ECHO_SEED.get());
 
                         // 食物
-//                        output.accept(ModItems.SCULK_FLESH.get());
+                        output.accept(ModItems.SCULK_FLESH.get());
 
                         output.accept(ModItems.SCULK_FUNGUS_SOUP.get());
                         output.accept(ModItems.COOKED_WARDEN_TENDRIL_BOWL.get());
@@ -80,6 +82,9 @@ public class ModItems {
                         output.accept(ModItems.PORK_ANCIENT_BONE_SOUP.get());
                         output.accept(ModItems.SOUL_PANCAKE.get());
                         output.accept(ModItems.COOKED_EERIE_MEAT.get());
+                        output.accept(ModItems.SOUL_SAIL.get());
+                        output.accept(ModItems.THOUSAND_SOUL_SAIL.get());
+                        output.accept(ModItems.MYRIAD_SOUL_SAIL.get());
 
                         // 方块食物
                         output.accept(ModItems.SCULK_STEW_BLOCK_ITEM.get());
@@ -87,9 +92,89 @@ public class ModItems {
                         output.accept(ModItems.SCULK_CHICKEN_STEW_BLOCK_ITEM.get());
                         output.accept(ModItems.ANCIENT_CITY_STYLE_SASHIMI.get());
                         output.accept(ModItems.SCULK_LAMB_CHOP.get());
+                        output.accept(ModItems.DEEPSLATE_CAKE_SLICE.get());
+
+                        output.accept(ModItems.SCULK_BREW.get());
+                        output.accept(ModItems.HONGLAN_JIU.get());
+                        output.accept(ModItems.HUADIAO_JIU.get());
+
+                        output.accept(ModItems.SCULK_JUICE_BUCKET.get());
+
+                        ResourceLocation brewId = ResourceLocation.parse(Kaleidoscope_sculk.MODID + ":sculk_brew");
+                        Item brewItem = BuiltInRegistries.ITEM.get(brewId);
+                        if (brewItem != null && brewItem != Items.AIR) {
+                            output.accept(brewItem);
+                        }
 
                     })
                     .build());
+
+    public static final DeferredItem<SculkBrewItem> SCULK_BREW =
+            ITEMS.register("sculk_brew",
+                    () -> new SculkBrewItem(ModBlocks.SCULK_BREW_BOTTLE.get())
+            );
+
+    public static final DeferredItem<SculkBrewItem> HONGLAN_JIU =
+            ITEMS.register("honglan_jiu",
+                    () -> new SculkBrewItem(ModBlocks.HONGLAN_JIU_BOTTLE.get())
+            );
+
+    public static final DeferredItem<SculkBrewItem> HUADIAO_JIU =
+            ITEMS.register("huadiao_jiu",
+                    () -> new SculkBrewItem(ModBlocks.HUADIAO_JIU_BOTTLE.get())
+            );
+
+    public static final DeferredItem<BucketItem> SCULK_JUICE_BUCKET =
+            ITEMS.register("sculk_juice_bucket",
+                    () -> new BucketItem(ModFluids.SCULK_JUICE.get(),
+                            new Item.Properties().stacksTo(16).craftRemainder(Items.BUCKET)
+                    )
+            );
+
+    public static final Supplier<Item> SOUL_SAIL = ITEMS.register("soul_sail",
+            () -> new SoulSailItem(new Item.Properties(), SoulSailItem.SailType.SOUL)
+    );
+
+    public static final Supplier<Item> SOUL_SAIL_FULL = ITEMS.register("soul_sail_full",
+            () -> new SoulSailItem(new Item.Properties(), SoulSailItem.SailType.SOUL)
+    );
+
+    public static final Supplier<Item> THOUSAND_SOUL_SAIL = ITEMS.register("thousand_soul_sail",
+            () -> new SoulSailItem(new Item.Properties(), SoulSailItem.SailType.THOUSAND)
+    );
+
+    public static final Supplier<Item> THOUSAND_SOUL_SAIL_FULL = ITEMS.register("thousand_soul_sail_full",
+            () -> new SoulSailItem(new Item.Properties(), SoulSailItem.SailType.THOUSAND)
+    );
+
+    public static final Supplier<Item> MYRIAD_SOUL_SAIL = ITEMS.register("myriad_soul_sail",
+            () -> new SoulSailItem(new Item.Properties(), SoulSailItem.SailType.MYRIAD)
+    );
+
+    public static final Supplier<Item> MYRIAD_SOUL_SAIL_FULL = ITEMS.register("myriad_soul_sail_full",
+            () -> new SoulSailItem(new Item.Properties(), SoulSailItem.SailType.MYRIAD)
+    );
+
+    // 魂幡方块物品
+//    public static final DeferredItem<SoulSailBlockItem> SOUL_SAIL_BLOCK_ITEM =
+//            ITEMS.register("soul_sail_block",
+//                    () -> new SoulSailBlockItem(ModBlocks.SOUL_SAIL_BLOCK.get(), new Item.Properties())
+//            );
+
+    // 深板岩蛋糕块物品
+    public static final DeferredItem<BlockItem> DEEPSLATE_CAKE = ITEMS.registerItem(
+            "deepslate_cake",
+            properties -> new BlockItem(ModBlocks.DEEPSLATE_CAKE.get(), properties),
+            new Item.Properties()
+    );
+
+    // 深板岩蛋糕片
+    public static final DeferredItem<DeepslateCakeSliceItem> DEEPSLATE_CAKE_SLICE = ITEMS.registerItem(
+            "deepslate_cake_slice",
+            DeepslateCakeSliceItem::new,
+            new Item.Properties()
+    );
+
 
 
     // 幽匿羊排
@@ -114,7 +199,7 @@ public class ModItems {
     // 静匿菜刀
     public static final DeferredItem<SilentKitchenKnife> SILENT_KITCHEN_KNIFE = ITEMS.register(
             "silent_kitchen_knife",
-            SilentKitchenKnife::new  // 直接使用 Supplier
+            SilentKitchenKnife::new
     );
 
     // 熟幽寂肉
@@ -198,7 +283,7 @@ public class ModItems {
             new Item.Properties()
     );
 
-    // 坚守者触须
+    // 监守者触须
     public static final DeferredItem<Item> WARDEN_TENDRIL = ITEMS.registerItem(
             "warden_tendril",
             Item::new,
@@ -234,7 +319,7 @@ public class ModItems {
                             .build())
     );
 
-    // 炒坚守者触须
+    // 炒监守者触须
     public static final DeferredItem<Item> COOKED_WARDEN_TENDRIL_BOWL = ITEMS.registerItem(
             "cooked_warden_tendril_bowl",
             properties -> new Item(properties) {

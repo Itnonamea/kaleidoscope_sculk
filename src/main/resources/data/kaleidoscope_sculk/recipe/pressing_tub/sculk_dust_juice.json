@@ -1,0 +1,7 @@
+{
+  "type": "kaleidoscope_tavern:pressing_tub",
+  "fluid": "kaleidoscope_sculk:sculk_juice",
+  "ingredient": {
+    "item": "kaleidoscope_sculk:sculk_flesh"
+  }
+}

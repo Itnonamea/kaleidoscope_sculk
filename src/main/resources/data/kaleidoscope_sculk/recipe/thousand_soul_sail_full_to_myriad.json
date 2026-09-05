@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    { "item": "minecraft:diamond" },
+    { "item": "minecraft:diamond" },
+    { "item": "minecraft:diamond" },
+    { "item": "kaleidoscope_sculk:soul" },
+    { "item": "kaleidoscope_sculk:thousand_soul_sail_full" },
+    { "item": "kaleidoscope_sculk:soul" },
+    { "item": "minecraft:diamond" },
+    { "item": "minecraft:diamond" },
+    { "item": "minecraft:diamond" }
+  ],
+  "result": {
+    "id": "kaleidoscope_sculk:myriad_soul_sail",
+    "count": 1
+  }
+}

@@ -1,6 +1,5 @@
 package org.kaleidoscope_sculk.register;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -8,24 +7,16 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.kaleidoscope_sculk.Kaleidoscope_sculk;
 import org.kaleidoscope_sculk.block.*;
-
-import static org.kaleidoscope_sculk.register.ModItems.ITEMS;
 
 public class ModBlocks {
 
@@ -45,6 +36,53 @@ public class ModBlocks {
             Block.box(3.0, 0.0, 3.0, 13.0, 6.0, 13.0),
             Block.box(1.0, 0.0, 1.0, 15.0, 1.0, 15.0)
     );
+
+//    public static final DeferredHolder<Block, SoulSailBlock> SOUL_SAIL_BLOCK =
+//            BLOCKS.register("soul_sail_block", () -> new SoulSailBlock(
+//                    Block.Properties.of()
+//                            .sound(SoundType.WOOL)
+//                            .strength(0.5f)
+//                            .noOcclusion()
+//                            .instabreak()
+//            ));
+
+    @SuppressWarnings("unchecked")
+    public static final DeferredHolder<Block, SculkDrinkBlock> SCULK_BREW_BOTTLE =
+            (DeferredHolder<Block, SculkDrinkBlock>) BLOCKS.register("sculk_brew_bottle",
+                    () -> new SculkDrinkBlock(
+                            2,
+                            Shapes.box(5.0/16.0, 0, 5.0/16.0, 11.0/16.0, 10.0/16.0, 11.0/16.0),
+                            Shapes.box(5.0/16.0, 0, 5.0/16.0, 11.0/16.0, 10.0/16.0, 11.0/16.0)  // 第二个形状（不会被用到）
+                    )
+            );
+
+    @SuppressWarnings("unchecked")
+    public static final DeferredHolder<Block, SculkDrinkBlock> HONGLAN_JIU_BOTTLE =
+            (DeferredHolder<Block, SculkDrinkBlock>) BLOCKS.register("honglan_jiu_bottle",
+                    () -> new SculkDrinkBlock(
+                            2,
+                            Shapes.box(5.0/16.0, 0, 5.0/16.0, 11.0/16.0, 14.0/16.0, 11.0/16.0),
+                            Shapes.box(5.0/16.0, 0, 5.0/16.0, 11.0/16.0, 14.0/16.0, 11.0/16.0)
+                    )
+            );
+
+    public static final DeferredHolder<Block, SculkDrinkBlock> HUADIAO_JIU_BOTTLE =
+            (DeferredHolder<Block, SculkDrinkBlock>) BLOCKS.register("huadiao_jiu_bottle",
+                    () -> new SculkDrinkBlock(
+                            2,
+                            Shapes.box(5.0/16.0, 0, 5.0/16.0, 11.0/16.0, 14.0/16.0, 11.0/16.0),
+                            Shapes.box(5.0/16.0, 0, 5.0/16.0, 11.0/16.0, 14.0/16.0, 11.0/16.0)
+                    )
+            );
+
+    public static final DeferredHolder<Block, DeepslateCakeBlock> DEEPSLATE_CAKE =
+            BLOCKS.register("deepslate_cake", () -> new DeepslateCakeBlock(
+                    Block.Properties.of()
+                            .sound(SoundType.DEEPSLATE)
+                            .strength(0.5f)
+                            .noOcclusion()
+                            .instabreak()
+            ));
 
     // 灶台
     public static final DeferredHolder<Block, DeepslateStoveBlock> DEEPSLATE_STOVE =

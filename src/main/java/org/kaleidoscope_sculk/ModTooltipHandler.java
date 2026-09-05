@@ -16,13 +16,13 @@ public class ModTooltipHandler {
     public static void onItemTooltip(ItemTooltipEvent event) {
         ItemStack itemStack = event.getItemStack();
 
-        // 坚守者触须
+        // 监守者触须
         if (itemStack.getItem() == ModItems.WARDEN_TENDRIL.get()) {
             event.getToolTip().add(1, Component.translatable("item.kaleidoscope_sculk.warden_tendril.tooltip")
                     .withStyle(ChatFormatting.GRAY));
         }
 
-        // 炒坚守者触须
+        // 炒监守者触须
         if (itemStack.getItem() == ModItems.COOKED_WARDEN_TENDRIL_BOWL.get()) {
             event.getToolTip().add(1, Component.translatable("item.kaleidoscope_sculk.cooked_warden_tendril_bowl.tooltip")
                     .withStyle(ChatFormatting.DARK_GRAY));

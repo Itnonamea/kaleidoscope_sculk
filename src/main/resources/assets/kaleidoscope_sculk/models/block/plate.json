@@ -1,0 +1,26 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"render_type": "minecraft:cutout",
+	"texture_size": [64, 64],
+	"textures": {
+		"0": "kaleidoscope_sculk:block/plate",
+		"particle": "kaleidoscope_sculk:block/plate"
+	},
+	"elements": [
+		{
+			"name": "bb_main",
+			"from": [1, 0, 1],
+			"to": [15, 2, 15],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 1, 8]},
+			"faces": {
+				"north": {"uv": [0.5, 0.5, 4, 1], "texture": "#0"},
+				"east": {"uv": [0.5, 0.5, 4, 1], "texture": "#0"},
+				"south": {"uv": [0.5, 0.5, 4, 1], "texture": "#0"},
+				"west": {"uv": [0.5, 0.5, 4, 1], "texture": "#0"},
+				"up": {"uv": [4, 8.5, 0.5, 5], "texture": "#0"},
+				"down": {"uv": [4, 8.5, 0.5, 5], "texture": "#0"}
+			}
+		}
+	]
+}

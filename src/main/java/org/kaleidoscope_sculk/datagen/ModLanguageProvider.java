@@ -90,7 +90,7 @@ public class ModLanguageProvider extends LanguageProvider {
             add("block." + Kaleidoscope_sculk.MODID + ".mustard_effect", "Wasabi (05:00)");
 
             // 效果描述
-            add("item." + Kaleidoscope_sculk.MODID + ".sonic_wave", "Sonic Wave IV (05:00)");
+            add("item." + Kaleidoscope_sculk.MODID + ".sonic_wave", "Sonic Wave III (05:00)");
             add("item." + Kaleidoscope_sculk.MODID + ".sonic_waveI", "Sonic Wave I (05:00)");
             add("item." + Kaleidoscope_sculk.MODID + ".warmth", "Warmth (05:00)");
             add("item." + Kaleidoscope_sculk.MODID + ".strength", "Strength (03:00)");
@@ -113,12 +113,11 @@ public class ModLanguageProvider extends LanguageProvider {
             add(ModEffects.ABYSS.get(), "深邃");
             add(ModEffects.SCULK_DASH.get(), "幽匿疾行");
 
-            // 创造标签
             add("itemGroup." + Kaleidoscope_sculk.MODID, "森罗物语：幽匿");
 
             // 物品名称
-            add(ModItems.WARDEN_TENDRIL.get(), "坚守者触须");
-            add(ModItems.COOKED_WARDEN_TENDRIL_BOWL.get(), "炒坚守者触须");
+            add(ModItems.WARDEN_TENDRIL.get(), "监守者触须");
+            add(ModItems.COOKED_WARDEN_TENDRIL_BOWL.get(), "炒监守者触须");
             add(ModItems.ANCIENT_BONE_FRAGMENT.get(), "远古骨碎片");
             add(ModItems.SCULK_FUNGUS.get(), "幽匿真菌");
             add(ModItems.SCULK_FUNGUS_SOUP.get(), "幽匿真菌汤");
@@ -139,11 +138,35 @@ public class ModLanguageProvider extends LanguageProvider {
             add(ModItems.SILENT_UPGRADE_SMITHING_TEMPLATE.get(), "静匿升级模板");
             add(ModItems.SILENT_KITCHEN_KNIFE.get(), "静匿菜刀");
             add(ModBlocks.SCULK_LAMB_CHOP_BLOCK.get(), "幽匿羊排");
+            add(ModItems.SCULK_JUICE_BUCKET.get(), "幽匿果汁桶");
+            add(ModItems.SCULK_BREW.get(), "幽匿菠萝啤");
+            add(ModItems.HONGLAN_JIU.get(), "红兰酒");
+            add(ModItems.HUADIAO_JIU.get(), "花雕酒");
 
-            // 深邃药水
+            // 深邃药水F
             add("item.minecraft.potion.effect.abyss_potion", "深邃药水");
             add("item.minecraft.splash_potion.effect.abyss_potion", "喷溅型深邃药水");
             add("item.minecraft.lingering_potion.effect.abyss_potion", "滞留型深邃药水");
+
+
+            add(ModItems.DEEPSLATE_CAKE_SLICE.get(), "深板岩蛋糕片");
+            add(ModItems.DEEPSLATE_CAKE.get(), "深板岩蛋糕");
+            add("item.kaleidoscope_sculk.deepslate_cake_slice.tooltip", "嚼劲十足");
+            add("item.kaleidoscope_sculk.deepslate_cake_slice.effect", "生命恢复 I (30秒)");
+            add("item.kaleidoscope_sculk.deepslate_cake_slice.damage", "§8§0有点硌牙");
+            add("item.kaleidoscope_sculk.deepslate_cake_slice.too_hungry", "§c再吃牙要碎完了");
+            add("death.attack.deepslate_cake_slice", "%1$s被硌深板岩蛋糕硌死了");
+            add("death.attack.deepslate_cake_slice.player", "%1$s被硌深板岩蛋糕硌死了");
+
+            // 魂幡物品
+            add(ModItems.SOUL_SAIL.get(), "魂幡");
+            add(ModItems.SOUL_SAIL.get().getDescriptionId() + ".soul", "魂幡");
+            add(ModItems.SOUL_SAIL.get().getDescriptionId() + ".thousand", "千魂幡");
+            add(ModItems.SOUL_SAIL.get().getDescriptionId() + ".myriad", "万魂魂幡");
+
+            add("item.kaleidoscope_sculk.soul_sail.soul.tooltip", "三十级满级");
+            add("item.kaleidoscope_sculk.soul_sail.thousand.tooltip", "六十级满级");
+            add("item.kaleidoscope_sculk.soul_sail.myriad.tooltip", "一百级满级");
 
             // 方块名称
             add(ModBlocks.SCULK_STEW_BLOCK.get(), "幽匿烩菜");
@@ -152,9 +175,9 @@ public class ModLanguageProvider extends LanguageProvider {
             add(ModBlocks.DEEPSLATE_STOVE.get(), "深板岩炉灶");
 
             // 物品描述
-            add("item." + Kaleidoscope_sculk.MODID + ".warden_tendril.tooltip", "坚守者掉落的奇特触须");
+            add("item." + Kaleidoscope_sculk.MODID + ".warden_tendril.tooltip", "监守者掉落的奇特触须");
             add("item." + Kaleidoscope_sculk.MODID + ".cooked_warden_tendril_bowl.tooltip", "美味而神秘");
-            add("item." + Kaleidoscope_sculk.MODID + ".ancient_bone_fragment.tooltip", "坚守者远古骨骼的碎片");
+            add("item." + Kaleidoscope_sculk.MODID + ".ancient_bone_fragment.tooltip", "监守者远古骨骼的碎片");
             add("item." + Kaleidoscope_sculk.MODID + ".sculk_fungus.tooltip", "从幽匿中生长出的奇异真菌");
             add("item." + Kaleidoscope_sculk.MODID + ".sculk_fungus_soup.tooltip", "恐惧的味道");
             add("item." + Kaleidoscope_sculk.MODID + ".sculk_stew.tooltip", "低语着深渊秘密的炖菜");
@@ -167,7 +190,7 @@ public class ModLanguageProvider extends LanguageProvider {
             add("item.kaleidoscope_sculk.sculk_branch.tooltip", "用刀从幽匿砍下来的枝条，可以磨成粉");
 
             // 效果描述
-            add("item." + Kaleidoscope_sculk.MODID + ".sonic_wave", "声波 IV (05:00)");
+            add("item." + Kaleidoscope_sculk.MODID + ".sonic_wave", "声波 III (05:00)");
             add("item." + Kaleidoscope_sculk.MODID + ".sonic_waveI", "声波 I (05:00)");
             add("item." + Kaleidoscope_sculk.MODID + ".warmth", "温暖 (05:00)");
             add("item." + Kaleidoscope_sculk.MODID + ".strength", "力量 II (03:00)");
