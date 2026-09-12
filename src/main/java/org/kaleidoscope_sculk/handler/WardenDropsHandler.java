@@ -8,12 +8,8 @@ import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import org.kaleidoscope_sculk.Kaleidoscope_sculk;
 import org.kaleidoscope_sculk.register.ModItems;
 
-import java.util.Random;
-
 @EventBusSubscriber(modid = Kaleidoscope_sculk.MODID)
 public class WardenDropsHandler {
-
-    private static final Random RANDOM = new Random();
 
     @SubscribeEvent
     public static void onLivingDrops(LivingDropsEvent event) {
@@ -21,7 +17,7 @@ public class WardenDropsHandler {
             return;
         }
 
-        int dropCount = 1 + RANDOM.nextInt(2); 
+        int dropCount = 1 + warden.getRandom().nextInt(2); 
 
         for (int i = 0; i < dropCount; i++) {
             ItemEntity drop = new ItemEntity(

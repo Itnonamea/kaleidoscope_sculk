@@ -75,9 +75,6 @@ public class SoulSailBannerHandler {
         return InteractionResult.SUCCESS;
     }
 
-    /**
-     * 必须是黑色旗帜，且旗帜图案中包含 skull（骷髅）图样
-     */
     private static boolean isValidBanner(Level level, BlockPos pos) {
         if (!(level.getBlockEntity(pos) instanceof BannerBlockEntity banner)) {
             return false;

@@ -4,12 +4,8 @@ import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.DrinkBlockEntity;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -35,6 +31,19 @@ public class Kaleidoscope_sculk {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    private static final Field VALID_BLOCKS_FIELD = lookupValidBlocksField();
+
+    private static Field lookupValidBlocksField() {
+        try {
+            Field field = BlockEntityType.class.getDeclaredField("validBlocks");
+            field.setAccessible(true);
+            return field;
+        } catch (NoSuchFieldException e) {
+            LOGGER.error("无法定位 BlockEntityType.validBlocks 字段，饮品方块注册将跳过", e);
+            return null;
+        }
+    }
+
     public Kaleidoscope_sculk(IEventBus modEventBus) {
         ModItems.ITEMS.register(modEventBus);
         ModItems.CREATIVE_TABS.register(modEventBus);
@@ -54,20 +63,22 @@ public class Kaleidoscope_sculk {
     
     @SuppressWarnings("unchecked")
     private void onCommonSetup(FMLCommonSetupEvent event) {
+        if (VALID_BLOCKS_FIELD == null) {
+            return;
+        }
+
         event.enqueueWork(() -> {
             try {
                 BlockEntityType<DrinkBlockEntity> drinkBe =
                         (BlockEntityType<DrinkBlockEntity>) com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks.DRINK_BE.get();
 
-                Field validBlocksField = BlockEntityType.class.getDeclaredField("validBlocks");
-                validBlocksField.setAccessible(true);
-
-                Set<Block> validBlocks = (Set<Block>) validBlocksField.get(drinkBe);
-                Set<Block> newValidBlocks = new HashSet<>(validBlocks);
+                Set<Block> validBlocks = (Set<Block>) VALID_BLOCKS_FIELD.get(drinkBe);
+                Set<Block> newValidBlocks = new HashSet<>(validBlocks.size() + 3);
+                newValidBlocks.addAll(validBlocks);
                 newValidBlocks.add(ModBlocks.SCULK_BREW_BOTTLE.get());
                 newValidBlocks.add(ModBlocks.HUADIAO_WINE.get());
                 newValidBlocks.add(ModBlocks.HONGLAN_WINE.get());
-                validBlocksField.set(drinkBe, newValidBlocks);
+                VALID_BLOCKS_FIELD.set(drinkBe, newValidBlocks);
 
                 LOGGER.info("已将 sculk_brew_bottle / huadiao_wine / honglan_wine 添加到 Tavern 的 DRINK_BE");
             } catch (Exception e) {
@@ -79,14 +90,5 @@ public class Kaleidoscope_sculk {
     private void registerPayloads(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar("1");
         registrar.playToServer(SonicBoomPacket.TYPE, SonicBoomPacket.CODEC, SonicBoomPacket::handle);
-    }
-
-    @EventBusSubscriber(modid = MODID, value = Dist.CLIENT)
-    public static class ClientModEvents {
-
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {
-            LOGGER.info("客户端启动 - {} 已加载", MODID);
-        }
     }
 }

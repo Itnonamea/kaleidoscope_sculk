@@ -65,9 +65,6 @@ public class EchoCropBlock extends CropBlock {
         return MATURE_AGE;
     }
 
-    /**
-     * 种子仍用于种植判定，但对外显示的产物是果实
-     */
     @Override
     protected ItemLike getBaseSeedId() {
         return ModItems.ECHO_SEED.get();
@@ -95,15 +92,26 @@ public class EchoCropBlock extends CropBlock {
         return state.is(Blocks.SCULK_CATALYST);
     }
 
+    private static boolean isOnValidSoil(BlockGetter level, BlockPos pos) {
+        return level.getBlockState(pos.below()).is(Blocks.SCULK_CATALYST);
+    }
+
+    private static void destroyTopIfPresent(Level level, BlockPos pos) {
+        BlockPos abovePos = pos.above();
+        if (level.getBlockState(abovePos).getBlock() instanceof EchoCropTopBlock) {
+            level.destroyBlock(abovePos, false);
+        }
+    }
+
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-        return level.getBlockState(pos.below()).is(Blocks.SCULK_CATALYST);
+        return isOnValidSoil(level, pos);
     }
 
     @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock,
                                 BlockPos neighborPos, boolean isMoving) {
-        if (!level.getBlockState(pos.below()).is(Blocks.SCULK_CATALYST)) {
+        if (!isOnValidSoil(level, pos)) {
             destroyPlant(level, pos, state);
         }
         super.neighborChanged(state, level, pos, neighborBlock, neighborPos, isMoving);
@@ -111,7 +119,7 @@ public class EchoCropBlock extends CropBlock {
 
     @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (!level.getBlockState(pos.below()).is(Blocks.SCULK_CATALYST)) {
+        if (!isOnValidSoil(level, pos)) {
             destroyPlant(level, pos, state);
             return;
         }
@@ -141,11 +149,7 @@ public class EchoCropBlock extends CropBlock {
 
     
     private void destroyPlant(Level level, BlockPos pos, BlockState state) {
-        BlockPos abovePos = pos.above();
-        BlockState aboveState = level.getBlockState(abovePos);
-        if (aboveState.getBlock() instanceof EchoCropTopBlock) {
-            level.destroyBlock(abovePos, false);
-        }
+        destroyTopIfPresent(level, pos);
 
         
         level.destroyBlock(pos, true);
@@ -200,10 +204,7 @@ public class EchoCropBlock extends CropBlock {
             level.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS,
                     1.0F, 0.8F + level.random.nextFloat() * 0.4F);
 
-            BlockPos abovePos = pos.above();
-            if (level.getBlockState(abovePos).getBlock() instanceof EchoCropTopBlock) {
-                level.destroyBlock(abovePos, false);
-            }
+            destroyTopIfPresent(level, pos);
 
             
             level.setBlock(pos, state.setValue(AGE, RESET_AGE), Block.UPDATE_ALL);
@@ -231,22 +232,14 @@ public class EchoCropBlock extends CropBlock {
         super.playerDestroy(level, player, pos, state, blockEntity, tool);
 
         
-        BlockPos abovePos = pos.above();
-        BlockState aboveState = level.getBlockState(abovePos);
-        if (aboveState.getBlock() instanceof EchoCropTopBlock) {
-            level.destroyBlock(abovePos, false);
-        }
+        destroyTopIfPresent(level, pos);
     }
 
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!newState.is(this)) {
             
-            BlockPos abovePos = pos.above();
-            BlockState aboveState = level.getBlockState(abovePos);
-            if (aboveState.getBlock() instanceof EchoCropTopBlock) {
-                level.destroyBlock(abovePos, false);
-            }
+            destroyTopIfPresent(level, pos);
         }
         super.onRemove(state, level, pos, newState, isMoving);
     }

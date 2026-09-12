@@ -19,10 +19,16 @@ out/
 # 反编译使用的临时工具与产物
 .buildtools/
 .classes/
+.cache/
 
 # 反编译出来的原始 class 与 jar（源码已还原到 src/main/java）
 /org/
 /*.jar
+
+# 反编译 / 手工打包残留：源码与资源一律以 src/main 为准
+/src_comment_backup/
+/data/
+/META-INF/
 
 # 运行时
 run/

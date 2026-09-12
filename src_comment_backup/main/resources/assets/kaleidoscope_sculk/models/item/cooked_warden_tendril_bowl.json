@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "kaleidoscope_sculk:item/cooked_warden_tendril_bowl"
-  }
-}

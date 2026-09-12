@@ -35,9 +35,6 @@ import org.kaleidoscope_sculk.register.ModItems;
 
 import java.util.List;
 
-/**
- * 幽匿骨镰 —— 继承 Cookery 原版 SickleItem，但覆写 useOn 以扩大采收范围（xz±4 / y0..3）。
- */
 public class SculkBoneSickleItem extends SickleItem {
     private static final Tier SCULK_BONE_SICKLE_TIER = new SimpleTier(
             BlockTags.INCORRECT_FOR_STONE_TOOL,
@@ -98,6 +95,12 @@ public class SculkBoneSickleItem extends SickleItem {
         if (blockState.isAir()) {
             return false;
         }
+
+        Block block = blockState.getBlock();
+        if (!(block instanceof BushBlock)) {
+            return false;
+        }
+
         if (!level.mayInteract(player, newPos)) {
             return false;
         }
@@ -105,7 +108,6 @@ public class SculkBoneSickleItem extends SickleItem {
             return false;
         }
 
-        Block block = blockState.getBlock();
         SickleHarvestEvent event = new SickleHarvestEvent(player, stack, newPos, blockState);
         if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
             return event.isCostDurability();

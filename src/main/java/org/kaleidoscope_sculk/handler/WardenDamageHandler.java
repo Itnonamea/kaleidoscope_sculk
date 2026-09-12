@@ -12,14 +12,14 @@ import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import org.kaleidoscope_sculk.Kaleidoscope_sculk;
 import org.kaleidoscope_sculk.register.ModItems;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @EventBusSubscriber(modid = Kaleidoscope_sculk.MODID)
 public class WardenDamageHandler {
 
-    private static final Map<UUID, Float> ACCUMULATED_DAMAGE = new HashMap<>();
+    private static final Map<UUID, Float> ACCUMULATED_DAMAGE = new ConcurrentHashMap<>();
 
     
     private static final float DROP_INTERVAL_RATIO = 0.10f;
@@ -32,6 +32,7 @@ public class WardenDamageHandler {
         Entity entity = event.getEntity();
 
         if (!(entity instanceof Warden warden)) return;
+        if (warden.level().isClientSide) return;
 
         float damage = event.getNewDamage();
         if (damage <= 0) return;
@@ -78,10 +79,6 @@ public class WardenDamageHandler {
         }
     }
 
-    /**
-     * 兜底清理：监守者因 despawn、区块卸载等原因离开世界时（不会触发死亡事件），
-     * 及时移除累积伤害记录，避免 UUID 残留导致内存泄漏。
-     */
     @SubscribeEvent
     public static void onWardenLeaveLevel(EntityLeaveLevelEvent event) {
         if (event.getEntity() instanceof Warden warden) {

@@ -9,7 +9,6 @@ import static com.github.ysbbbbbb.kaleidoscopecookery.init.ModEffects.WARMTH;
 import static com.github.ysbbbbbb.kaleidoscopecookery.init.ModEffects.VIGOR;
 import static com.github.ysbbbbbb.kaleidoscopecookery.init.ModEffects.MUSTARD;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -24,9 +23,6 @@ import org.kaleidoscope_sculk.block.DeepslateStoveBlock;
 import org.kaleidoscope_sculk.block.EchoCropBlock;
 import org.kaleidoscope_sculk.block.EchoCropTopBlock;
 import org.kaleidoscope_sculk.block.FoodBiteBlock;
-
-import java.util.List;
-import java.util.function.Supplier;
 
 public class ModBlocks {
 
@@ -96,19 +92,12 @@ public class ModBlocks {
                             .alwaysEdible()
                             .nutrition(4)
                             .saturationModifier(1.2f)
+                            .effect(ModBlocks::createMustardEffect, 1.0f)
+                            .effect(() -> new MobEffectInstance(ModEffects.ECHO.getDelegate(), 3600, 0), 1.0f)
                             .build(),
                     4,
                     PLATE,
-                    List.<Supplier<Item>>of(
-                            () -> Items.RED_CANDLE,       
-                            () -> Items.SCULK_SHRIEKER,   
-                            () -> Items.BOWL              
-                    ),
-                    List.of(
-                            ModBlocks::createMustardEffect,
-                            () -> new MobEffectInstance(ModEffects.ECHO.getDelegate(), 3600, 0)
-                    ),
-                    1.0f
+                    Items.BOWL
             ));
 
     public static final DeferredHolder<Block, FoodBiteBlock> SCULK_STEW_BLOCK =
@@ -117,15 +106,12 @@ public class ModBlocks {
                             .alwaysEdible()
                             .nutrition(4)
                             .saturationModifier(1.0f)
+                            .effect(() -> new MobEffectInstance(WARMTH.getDelegate(), 6000, 0), 1.0f)
+                            .effect(() -> new MobEffectInstance(ModEffects.ECHO.getDelegate(), 2400, 0), 1.0f)
                             .build(),
                     3,
                     SHAPE_MEDIUM_WITH_MAT,
-                    List.<Supplier<Item>>of(() -> Items.FLOWER_POT),
-                    List.of(
-                            () -> new MobEffectInstance(WARMTH.getDelegate(), 6000, 0),
-                            () -> new MobEffectInstance(ModEffects.ECHO.getDelegate(), 2400, 0)
-                    ),
-                    1.0f
+                    Items.FLOWER_POT
             ));
 
     public static final DeferredHolder<Block, FoodBiteBlock> SCULK_CHICKEN_STEW_BLOCK =
@@ -134,15 +120,12 @@ public class ModBlocks {
                             .alwaysEdible()
                             .nutrition(5)
                             .saturationModifier(1.3f)
+                            .effect(() -> new MobEffectInstance(WARMTH.getDelegate(), 2400, 0), 1.0f)
+                            .effect(() -> new MobEffectInstance(ModEffects.ECHO.getDelegate(), 3600, 0), 1.0f)
                             .build(),
                     3,
                     SHAPE_MEDIUM_WITH_MAT,
-                    List.<Supplier<Item>>of(() -> Items.FLOWER_POT),
-                    List.of(
-                            () -> new MobEffectInstance(WARMTH.getDelegate(), 2400, 0),
-                            () -> new MobEffectInstance(ModEffects.ECHO.getDelegate(), 3600, 0)
-                    ),
-                    1.0f
+                    Items.FLOWER_POT
             ));
 
     public static final DeferredHolder<Block, FoodBiteBlock> SCULK_LAMB_CHOP_BLOCK =
@@ -151,18 +134,12 @@ public class ModBlocks {
                             .alwaysEdible()
                             .nutrition(4)
                             .saturationModifier(1.2f)
+                            .effect(() -> new MobEffectInstance(ModEffects.SCULK_DASH.getDelegate(), 6000, 0), 1.0f)
+                            .effect(() -> new MobEffectInstance(ModEffects.SONIC_WAVE.getDelegate(), 2400, 2), 1.0f)
                             .build(),
                     3,
                     PLATE,
-                    List.<Supplier<Item>>of(
-                            () -> Items.BOWL,
-                            () -> ModItems.SCULK_FUNGUS.get()
-                    ),
-                    List.of(
-                            () -> new MobEffectInstance(ModEffects.SCULK_DASH.getDelegate(), 6000, 0),
-                            () -> new MobEffectInstance(ModEffects.SONIC_WAVE.getDelegate(), 2400, 2)
-                    ),
-                    1.0f
+                    Items.BOWL
             ));
 
     public static final DeferredHolder<Block, FoodBiteBlock> SCULK_PORK_RIBS_BLOCK =
@@ -171,14 +148,11 @@ public class ModBlocks {
                             .alwaysEdible()
                             .nutrition(4)
                             .saturationModifier(1.1f)
+                            .effect(() -> new MobEffectInstance(ModEffects.SONIC_WAVE.getDelegate(), 3600, 4), 1.0f)
                             .build(),
                     4,
                     PLATE,
-                    List.<Supplier<Item>>of(() -> Items.BOWL),
-                    List.of(
-                            () -> new MobEffectInstance(ModEffects.SONIC_WAVE.getDelegate(), 3600, 4)
-                    ),
-                    1.0f
+                    Items.BOWL
             ));
 
     public static final DeferredHolder<Block, EchoCropBlock> ECHO_CROP =

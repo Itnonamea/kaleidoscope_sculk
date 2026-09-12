@@ -108,5 +108,22 @@
   "block.kaleidoscope_sculk.huadiao_wine": "Huadiao Wine",
   "item.kaleidoscope_sculk.huadiao_wine": "Huadiao Wine",
   "block.kaleidoscope_sculk.honglan_wine": "Honglan Wine",
-  "item.kaleidoscope_sculk.honglan_wine": "Honglan Wine"
+  "item.kaleidoscope_sculk.honglan_wine": "Honglan Wine",
+  "item.kaleidoscope_sculk.soul_sail.title": "✦ %s",
+  "item.kaleidoscope_sculk.soul_sail.full_title": "%s ✦ Max Level ✦",
+  "item.kaleidoscope_sculk.soul_sail.bar_full": " §eMax Level",
+  "item.kaleidoscope_sculk.soul_sail.xp_level": "Experience level: %s / %s",
+  "item.kaleidoscope_sculk.soul_sail.xp_points": "Experience points: %s / %s",
+  "item.kaleidoscope_sculk.soul_sail.usage": "Right-click: withdraw 1 level  Shift+Right-click: withdraw all",
+  "item.kaleidoscope_sculk.soul_sail.final_form": "✦ Final form reached",
+  "item.kaleidoscope_sculk.soul_sail.need_more": "To max level: %s levels (%s points)",
+  "item.kaleidoscope_sculk.soul_sail.upgrade_hint": "At max level + 8 Souls → %s",
+  "item.kaleidoscope_sculk.soul_sail.tier.thousand": "Thousand Soul Sail",
+  "item.kaleidoscope_sculk.soul_sail.tier.myriad": "Myriad Soul Sail",
+  "item.kaleidoscope_sculk.soul_sail.tier.final": "Final Form",
+  "item.kaleidoscope_sculk.soul_sail.no_xp": "The Soul Sail holds no experience",
+  "item.kaleidoscope_sculk.soul_sail.withdraw_all": "Withdrew all experience!",
+  "item.kaleidoscope_sculk.soul_sail.withdraw_amount": "Withdrew %s points of experience",
+  "item.kaleidoscope_sculk.soul_sail.full_message": "Max-level %s is already full!",
+  "item.kaleidoscope_sculk.soul_sail.storage": "%s storage: %s / %s points (%s levels)"
 }

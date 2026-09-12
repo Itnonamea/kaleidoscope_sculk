@@ -70,7 +70,7 @@ public class SculkDashEffect extends MobEffect {
 
     private static void removeModifier(LivingEntity entity, Holder<Attribute> attribute, ResourceLocation modifierId) {
         AttributeInstance instance = entity.getAttribute(attribute);
-        if (instance != null) {
+        if (instance != null && instance.getModifier(modifierId) != null) {
             instance.removeModifier(modifierId);
         }
     }

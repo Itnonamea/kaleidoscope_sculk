@@ -85,11 +85,15 @@ public class EchoCropTopBlock extends Block {
         }
     }
 
+    private static boolean hasCropBelow(BlockGetter level, BlockPos pos) {
+        return level.getBlockState(pos.below()).getBlock() instanceof EchoCropBlock;
+    }
+
     @Override
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
         super.onPlace(state, level, pos, oldState, isMoving);
 
-        if (!(level.getBlockState(pos.below()).getBlock() instanceof EchoCropBlock)) {
+        if (!hasCropBelow(level, pos)) {
             level.destroyBlock(pos, true);
         }
     }
@@ -97,7 +101,7 @@ public class EchoCropTopBlock extends Block {
     @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock,
                                 BlockPos neighborPos, boolean isMoving) {
-        if (!(level.getBlockState(pos.below()).getBlock() instanceof EchoCropBlock)) {
+        if (!hasCropBelow(level, pos)) {
             level.destroyBlock(pos, true);
         }
         super.neighborChanged(state, level, pos, neighborBlock, neighborPos, isMoving);

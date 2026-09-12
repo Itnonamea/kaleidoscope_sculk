@@ -3,6 +3,7 @@ package org.kaleidoscope_sculk.item;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -24,7 +25,9 @@ import org.kaleidoscope_sculk.component.SoulSailData;
 import org.kaleidoscope_sculk.register.ModDataComponents;
 import org.kaleidoscope_sculk.register.ModItems;
 
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 public class SoulSailItem extends Item implements Equipable {
 
@@ -34,6 +37,29 @@ public class SoulSailItem extends Item implements Equipable {
 
     private static final int BAR_SEGMENTS = 20;
     private static final float SOUL_DROP_CHANCE = 0.3f;
+
+    private static Map<SailType, String[]> progressBars;
+
+    private static String[] progressBars(SailType type) {
+        Map<SailType, String[]> cache = progressBars;
+        if (cache == null) {
+            cache = new EnumMap<>(SailType.class);
+            for (SailType sailType : SailType.values()) {
+                String[] bars = new String[BAR_SEGMENTS + 1];
+                for (int filled = 0; filled <= BAR_SEGMENTS; filled++) {
+                    StringBuilder builder = new StringBuilder(BAR_SEGMENTS * 3 + 4);
+                    builder.append("§7[");
+                    for (int i = 0; i < BAR_SEGMENTS; i++) {
+                        builder.append(i < filled ? sailType.barColor + "█" : "§8░");
+                    }
+                    bars[filled] = builder.append("§7]").toString();
+                }
+                cache.put(sailType, bars);
+            }
+            progressBars = cache;
+        }
+        return cache.get(type);
+    }
 
     private final SailType type;
     private final int maxLevel;
@@ -50,9 +76,30 @@ public class SoulSailItem extends Item implements Equipable {
     
     
 
-    public static int getTotalXpForLevel(int level) {
+    private static final int MAX_CACHED_LEVEL = 128;
+
+    private static final int[] TOTAL_XP_BY_LEVEL = buildTotalXpTable();
+
+    private static int[] buildTotalXpTable() {
+        int[] table = new int[MAX_CACHED_LEVEL + 1];
         int total = 0;
-        for (int i = 0; i < level; i++) {
+        for (int i = 0; i < MAX_CACHED_LEVEL; i++) {
+            total += getXpNeededForLevel(i);
+            table[i + 1] = total;
+        }
+        return table;
+    }
+
+    public static int getTotalXpForLevel(int level) {
+        if (level <= 0) {
+            return 0;
+        }
+        if (level <= MAX_CACHED_LEVEL) {
+            return TOTAL_XP_BY_LEVEL[level];
+        }
+
+        int total = TOTAL_XP_BY_LEVEL[MAX_CACHED_LEVEL];
+        for (int i = MAX_CACHED_LEVEL; i < level; i++) {
             total += getXpNeededForLevel(i);
         }
         return total;
@@ -66,15 +113,32 @@ public class SoulSailItem extends Item implements Equipable {
     }
 
     public static int xpToLevel(int xpPoints) {
-        int level = 0;
-        int totalXp = 0;
-
-        while (totalXp + getXpNeededForLevel(level) <= xpPoints) {
-            totalXp += getXpNeededForLevel(level);
-            level++;
+        if (xpPoints <= 0) {
+            return 0;
         }
 
-        return level;
+        final int[] table = TOTAL_XP_BY_LEVEL;
+        if (xpPoints >= table[MAX_CACHED_LEVEL]) {
+            int level = MAX_CACHED_LEVEL;
+            int total = table[MAX_CACHED_LEVEL];
+            while (total + getXpNeededForLevel(level) <= xpPoints) {
+                total += getXpNeededForLevel(level);
+                level++;
+            }
+            return level;
+        }
+
+        int lo = 0;
+        int hi = MAX_CACHED_LEVEL;
+        while (lo < hi) {
+            int mid = (lo + hi + 1) >>> 1;
+            if (table[mid] <= xpPoints) {
+                lo = mid;
+            } else {
+                hi = mid - 1;
+            }
+        }
+        return lo;
     }
 
     
@@ -220,10 +284,6 @@ public class SoulSailItem extends Item implements Equipable {
         return this.maxXp;
     }
 
-    public String getTypeName() {
-        return this.type.displayName;
-    }
-
     public ChatFormatting getColor() {
         return this.type.color;
     }
@@ -263,7 +323,8 @@ public class SoulSailItem extends Item implements Equipable {
         
         if (player.isShiftKeyDown()) {
             if (storedXp <= 0) {
-                player.displayClientMessage(Component.literal("§c魂幡中没有经验"), true);
+                player.displayClientMessage(Component.translatable("item.kaleidoscope_sculk.soul_sail.no_xp")
+                        .withStyle(ChatFormatting.RED), true);
                 return InteractionResultHolder.pass(stack);
             }
 
@@ -277,7 +338,9 @@ public class SoulSailItem extends Item implements Equipable {
 
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.5f, 1.0f);
-            player.displayClientMessage(Component.literal("§a已取出全部经验！"), true);
+            player.displayClientMessage(
+                    Component.translatable("item.kaleidoscope_sculk.soul_sail.withdraw_all")
+                            .withStyle(ChatFormatting.GREEN), true);
 
             return InteractionResultHolder.success(stack);
         }
@@ -295,7 +358,9 @@ public class SoulSailItem extends Item implements Equipable {
 
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.5f, 1.0f);
-            player.displayClientMessage(Component.literal("§a取出了 §e" + toWithdraw + " §a点经验"), true);
+            player.displayClientMessage(
+                    Component.translatable("item.kaleidoscope_sculk.soul_sail.withdraw_amount", toWithdraw)
+                            .withStyle(ChatFormatting.GREEN), true);
 
             stack = swapToNonFull(stack, player, hand, isFull);
 
@@ -306,11 +371,12 @@ public class SoulSailItem extends Item implements Equipable {
         if (!level.isClientSide) {
             if (isFull) {
                 player.displayClientMessage(
-                        Component.literal("§e满级" + this.type.displayName + " §7经验已满！"), true);
+                        Component.translatable("item.kaleidoscope_sculk.soul_sail.full_message", named())
+                                .withStyle(ChatFormatting.YELLOW), true);
             } else {
-                player.displayClientMessage(Component.literal(
-                        "§7" + this.type.displayName + "存储: §e" + storedXp + " §7/ §e" + this.maxXp
-                                + " §7点经验 (§e" + storedLevel + "§7级)"), true);
+                player.displayClientMessage(
+                        Component.translatable("item.kaleidoscope_sculk.soul_sail.storage",
+                                named(), storedXp, this.maxXp, storedLevel), true);
             }
         }
 
@@ -382,72 +448,85 @@ public class SoulSailItem extends Item implements Equipable {
         int storedLevel = xpToLevel(storedXp);
 
         if (isFull) {
-            tooltip.add(Component.literal(this.type.color + this.type.displayName + " §e✦ 满级 ✦"));
+            tooltip.add(Component.translatable("item.kaleidoscope_sculk.soul_sail.full_title", named())
+                    .withStyle(ChatFormatting.YELLOW));
         } else {
-            tooltip.add(Component.literal(this.type.color + "✦ " + this.type.displayName));
+            tooltip.add(Component.translatable("item.kaleidoscope_sculk.soul_sail.title", named())
+                    .withStyle(this.type.color));
             tooltip.add(Component.translatable("item.kaleidoscope_sculk.soul_sail." + this.type.name + ".tooltip")
                     .withStyle(ChatFormatting.GRAY));
         }
 
-        tooltip.add(Component.literal(buildProgressBar(storedXp, isFull)));
+        MutableComponent bar = Component.literal(buildProgressBar(storedXp, isFull));
+        if (isFull) {
+            bar.append(Component.translatable("item.kaleidoscope_sculk.soul_sail.bar_full")
+                    .withStyle(ChatFormatting.YELLOW));
+        }
+        tooltip.add(bar);
 
         if (!isFull) {
-            tooltip.add(Component.literal("§7经验等级: §e" + storedLevel + " §7/ §e" + this.maxLevel));
-            tooltip.add(Component.literal("§7经验点数: §e" + format(storedXp) + " §7/ §e" + format(this.maxXp)));
+            tooltip.add(Component.translatable("item.kaleidoscope_sculk.soul_sail.xp_level",
+                    storedLevel, this.maxLevel).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("item.kaleidoscope_sculk.soul_sail.xp_points",
+                    format(storedXp), format(this.maxXp)).withStyle(ChatFormatting.GRAY));
         }
 
-        tooltip.add(Component.literal(""));
+        tooltip.add(Component.empty());
         if (isFull || storedXp > 0) {
-            tooltip.add(Component.literal("§e右键 §7取1级  §eShift+右键 §7全取"));
+            tooltip.add(Component.translatable("item.kaleidoscope_sculk.soul_sail.usage")
+                    .withStyle(ChatFormatting.YELLOW));
         }
 
-        tooltip.add(Component.literal(""));
+        tooltip.add(Component.empty());
         if (this.type == SailType.MYRIAD) {
-            tooltip.add(Component.literal("§6✦ 已到达最终形态"));
+            tooltip.add(Component.translatable("item.kaleidoscope_sculk.soul_sail.final_form")
+                    .withStyle(ChatFormatting.GOLD));
         } else {
             if (!isFull) {
                 int needLevel = this.maxLevel - storedLevel;
                 int needXp = this.maxXp - storedXp;
-                tooltip.add(Component.literal("§7满级还需: §e" + needLevel + " §7级 (§e" + format(needXp) + " §7点)"));
+                tooltip.add(Component.translatable("item.kaleidoscope_sculk.soul_sail.need_more",
+                        needLevel, format(needXp)).withStyle(ChatFormatting.GRAY));
             }
-            tooltip.add(Component.literal("§7满级后 + 8灵魂 → §e" + this.getNextTierName()));
+            tooltip.add(Component.translatable("item.kaleidoscope_sculk.soul_sail.upgrade_hint",
+                    getNextTierComponent()).withStyle(ChatFormatting.GRAY));
         }
     }
 
     private String buildProgressBar(int storedXp, boolean isFull) {
-        float progress = (float) storedXp / this.maxXp;
-        int bars = (int) (progress * BAR_SEGMENTS);
-
-        StringBuilder bar = new StringBuilder("§7[");
-
-        if (isFull) {
-            bar.append("§e█".repeat(BAR_SEGMENTS)).append("§7] §e已满级");
-            return bar.toString();
-        }
-
-        String filledColor = switch (this.type) {
-            case SOUL -> "§b";
-            case THOUSAND -> "§5";
-            case MYRIAD -> "§6";
-        };
-
-        for (int i = 0; i < BAR_SEGMENTS; i++) {
-            bar.append(i < bars ? filledColor + "█" : "§8░");
-        }
-
-        return bar.append("§7]").toString();
+        int filled = isFull
+                ? BAR_SEGMENTS
+                : (int) ((float) storedXp / this.maxXp * BAR_SEGMENTS);
+        filled = Math.max(0, Math.min(BAR_SEGMENTS, filled));
+        return progressBars(this.type)[filled];
     }
 
-    private String getNextTierName() {
+    private Component getNextTierComponent() {
         return switch (this.type) {
-            case SOUL -> "千魂幡";
-            case THOUSAND -> "万魂幡";
-            case MYRIAD -> "最终形态";
+            case SOUL -> Component.translatable("item.kaleidoscope_sculk.soul_sail.tier.thousand");
+            case THOUSAND -> Component.translatable("item.kaleidoscope_sculk.soul_sail.tier.myriad");
+            case MYRIAD -> Component.translatable("item.kaleidoscope_sculk.soul_sail.tier.final");
         };
+    }
+
+    private Component named() {
+        return Component.translatable("item.kaleidoscope_sculk.soul_sail." + this.type.name);
     }
 
     private static String format(int value) {
-        return String.format("%,d", value);
+        String digits = Integer.toString(value);
+        int length = digits.length();
+        if (length <= 3) {
+            return digits;
+        }
+
+        StringBuilder builder = new StringBuilder(length + length / 3);
+        int head = length % 3 == 0 ? 3 : length % 3;
+        builder.append(digits, 0, head);
+        for (int i = head; i < length; i += 3) {
+            builder.append(',').append(digits, i, i + 3);
+        }
+        return builder.toString();
     }
 
     @Override
@@ -457,10 +536,7 @@ public class SoulSailItem extends Item implements Equipable {
 
     @Override
     public Component getName(ItemStack stack) {
-        if (isFullItem(stack)) {
-            return Component.literal(this.type.color + this.type.displayName + " §e(满级)");
-        }
-        return Component.literal(this.type.color + this.type.displayName);
+        return Component.translatable(getDescriptionId(stack)).withStyle(this.type.color);
     }
 
     @Override
@@ -469,20 +545,20 @@ public class SoulSailItem extends Item implements Equipable {
     }
 
     public enum SailType {
-        SOUL("soul", LEVEL_SOUL, ChatFormatting.BLUE, "魂幡"),
-        THOUSAND("thousand", LEVEL_THOUSAND, ChatFormatting.DARK_PURPLE, "千魂幡"),
-        MYRIAD("myriad", LEVEL_MYRIAD, ChatFormatting.GOLD, "万魂幡");
+        SOUL("soul", LEVEL_SOUL, ChatFormatting.BLUE, "§b"),
+        THOUSAND("thousand", LEVEL_THOUSAND, ChatFormatting.DARK_PURPLE, "§5"),
+        MYRIAD("myriad", LEVEL_MYRIAD, ChatFormatting.GOLD, "§6");
 
         public final String name;
         public final int maxLevel;
         public final ChatFormatting color;
-        public final String displayName;
+        public final String barColor;
 
-        SailType(String name, int maxLevel, ChatFormatting color, String displayName) {
+        SailType(String name, int maxLevel, ChatFormatting color, String barColor) {
             this.name = name;
             this.maxLevel = maxLevel;
             this.color = color;
-            this.displayName = displayName;
+            this.barColor = barColor;
         }
 
         public static SailType fromName(String name) {

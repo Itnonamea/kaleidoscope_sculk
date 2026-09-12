@@ -20,12 +20,8 @@ import org.kaleidoscope_sculk.Kaleidoscope_sculk;
 import org.kaleidoscope_sculk.register.ModItems;
 import org.kaleidoscope_sculk.register.ModTags;
 
-import java.util.Random;
-
 @EventBusSubscriber(modid = Kaleidoscope_sculk.MODID)
 public class SculkVeinHandler {
-
-    private static final Random RANDOM = new Random();
 
     
     private static final float SCULK_BRANCH_DROP_CHANCE = 0.1f;
@@ -58,7 +54,7 @@ public class SculkVeinHandler {
             ServerLevel serverLevel = (ServerLevel) level;
 
             
-            int fungusCount = isSculkVein ? 1 : (1 + RANDOM.nextInt(3));
+            int fungusCount = isSculkVein ? 1 : (1 + serverLevel.random.nextInt(3));
             for (int i = 0; i < fungusCount; i++) {
                 ItemEntity drop = new ItemEntity(
                         serverLevel,
@@ -72,7 +68,7 @@ public class SculkVeinHandler {
             }
 
             
-            if (RANDOM.nextFloat() < SCULK_BRANCH_DROP_CHANCE) {
+            if (serverLevel.random.nextFloat() < SCULK_BRANCH_DROP_CHANCE) {
                 ItemEntity branchDrop = new ItemEntity(
                         serverLevel,
                         pos.getX() + 0.5,
@@ -85,7 +81,7 @@ public class SculkVeinHandler {
             }
 
             
-            if (isSculkVein && RANDOM.nextFloat() < SCULK_CATERPILLAR_DROP_CHANCE) {
+            if (isSculkVein && serverLevel.random.nextFloat() < SCULK_CATERPILLAR_DROP_CHANCE) {
                 ItemEntity caterpillarDrop = new ItemEntity(
                         serverLevel,
                         pos.getX() + 0.5,

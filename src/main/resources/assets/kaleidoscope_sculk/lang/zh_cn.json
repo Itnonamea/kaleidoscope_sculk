@@ -105,5 +105,22 @@
   "block.kaleidoscope_sculk.huadiao_wine": "花雕酒",
   "item.kaleidoscope_sculk.huadiao_wine": "花雕酒",
   "block.kaleidoscope_sculk.honglan_wine": "红兰酒",
-  "item.kaleidoscope_sculk.honglan_wine": "红兰酒"
+  "item.kaleidoscope_sculk.honglan_wine": "红兰酒",
+  "item.kaleidoscope_sculk.soul_sail.title": "✦ %s",
+  "item.kaleidoscope_sculk.soul_sail.full_title": "%s ✦ 满级 ✦",
+  "item.kaleidoscope_sculk.soul_sail.bar_full": " §e已满级",
+  "item.kaleidoscope_sculk.soul_sail.xp_level": "经验等级: %s / %s",
+  "item.kaleidoscope_sculk.soul_sail.xp_points": "经验点数: %s / %s",
+  "item.kaleidoscope_sculk.soul_sail.usage": "右键：取1级  Shift+右键：全取",
+  "item.kaleidoscope_sculk.soul_sail.final_form": "✦ 已到达最终形态",
+  "item.kaleidoscope_sculk.soul_sail.need_more": "满级还需: %s 级 (%s 点)",
+  "item.kaleidoscope_sculk.soul_sail.upgrade_hint": "满级后 + 8灵魂 → %s",
+  "item.kaleidoscope_sculk.soul_sail.tier.thousand": "千魂幡",
+  "item.kaleidoscope_sculk.soul_sail.tier.myriad": "万魂幡",
+  "item.kaleidoscope_sculk.soul_sail.tier.final": "最终形态",
+  "item.kaleidoscope_sculk.soul_sail.no_xp": "§c魂幡中没有经验",
+  "item.kaleidoscope_sculk.soul_sail.withdraw_all": "§a已取出全部经验！",
+  "item.kaleidoscope_sculk.soul_sail.withdraw_amount": "§a取出了 §e%s §a点经验",
+  "item.kaleidoscope_sculk.soul_sail.full_message": "§e满级%s §7经验已满！",
+  "item.kaleidoscope_sculk.soul_sail.storage": "§7%s存储: §e%s §7/ §e%s §7点经验 (§e%s§7级)"
 }

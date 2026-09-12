@@ -23,10 +23,6 @@ public class EchoEffectHandler {
         return holder;
     }
 
-    /**
-     * 回响效果的「攻击破除」：带回响的实体一旦主动造成伤害，
-     * 立即移除自身的回响效果（暴露自己，无法再免疫索敌）。
-     */
     @SubscribeEvent
     public static void onEchoBearerDealsDamage(LivingIncomingDamageEvent event) {
         if (event.getEntity().level().isClientSide) return;

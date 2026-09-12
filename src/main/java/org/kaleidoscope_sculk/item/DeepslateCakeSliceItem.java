@@ -62,7 +62,8 @@ public class DeepslateCakeSliceItem extends Item {
         Player player = context.getPlayer();
         ItemStack stack = context.getItemInHand();
 
-        if (!level.getBlockState(placePos).canBeReplaced() || !level.getBlockState(placePos.below()).isSolid()) {
+        BlockState placeState = level.getBlockState(placePos);
+        if (!placeState.canBeReplaced() || !level.getBlockState(placePos.below()).isSolid()) {
             return InteractionResult.PASS;
         }
 

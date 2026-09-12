@@ -87,8 +87,6 @@ public record SonicBoomPacket() implements CustomPacketPayload {
         double radius = 0.5; 
 
         
-        // rayTraceEntities 内部已按距离升序排列，命中距离单调递增，
-        // 粒子 stepKey 因此也是全局单调的，用一个游标即可代替 HashSet 去重。
         List<EntityHit> hits = rayTraceEntities(player, startPos, lookVec, range, radius);
 
         int lastParticleStep = -1;
@@ -100,7 +98,7 @@ public record SonicBoomPacket() implements CustomPacketPayload {
             if (currentDamage <= 0.5f) break; 
 
             
-            Vec3 targetPos = hit.entity.getEyePosition();
+            Vec3 targetPos = hit.entity().getEyePosition();
             Vec3 direction = targetPos.subtract(startPos).normalize();
             double distance = startPos.distanceTo(targetPos);
             int steps = Mth.floor(distance) + 7;
@@ -116,7 +114,7 @@ public record SonicBoomPacket() implements CustomPacketPayload {
             }
 
             
-            hit.entity.hurt(level.damageSources().sonicBoom(player), currentDamage);
+            hit.entity().hurt(level.damageSources().sonicBoom(player), currentDamage);
         }
 
         
@@ -173,7 +171,7 @@ public record SonicBoomPacket() implements CustomPacketPayload {
         }
 
         
-        hits.sort(Comparator.comparingDouble(h -> h.distance));
+        hits.sort(Comparator.comparingDouble(EntityHit::distance));
         return hits;
     }
 
@@ -246,13 +244,6 @@ public record SonicBoomPacket() implements CustomPacketPayload {
     }
 
     
-    private static class EntityHit {
-        final LivingEntity entity;
-        final double distance;
-
-        EntityHit(LivingEntity entity, double distance) {
-            this.entity = entity;
-            this.distance = distance;
-        }
+    private record EntityHit(LivingEntity entity, double distance) {
     }
 }
