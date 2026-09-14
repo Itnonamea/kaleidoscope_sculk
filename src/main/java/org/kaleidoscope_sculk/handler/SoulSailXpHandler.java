@@ -51,18 +51,15 @@ public class SoulSailXpHandler {
 
     private static boolean storeInSlot(Player player, Inventory inventory, int slot, int xpPoints) {
         ItemStack stack = inventory.getItem(slot);
-        if (!SoulSailItem.isNonFullItem(stack) || !(stack.getItem() instanceof SoulSailItem sailItem)) {
+        if (!(stack.getItem() instanceof SoulSailItem sailItem) || SoulSailItem.isFullItem(stack)) {
             return false;
         }
 
-        int beforeXp = SoulSailItem.getStoredXp(stack);
-        boolean becameFull = sailItem.storeXp(stack, xpPoints);
-
-        if (SoulSailItem.getStoredXp(stack) <= beforeXp) {
+        if (SoulSailItem.getStoredXp(stack) >= sailItem.getMaxXp()) {
             return false;
         }
 
-        if (becameFull) {
+        if (sailItem.storeXp(stack, xpPoints)) {
             inventory.setItem(slot, SoulSailItem.convertToFullItem(stack));
         }
 

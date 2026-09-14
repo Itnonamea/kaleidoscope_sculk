@@ -18,8 +18,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import org.kaleidoscope_sculk.Kaleidoscope_sculk;
 import org.kaleidoscope_sculk.register.ModItems;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
 
 @EventBusSubscriber(modid = Kaleidoscope_sculk.MODID)
 public class ErosionKnifeDropHandler {
@@ -80,20 +79,14 @@ public class ErosionKnifeDropHandler {
         }
 
         int totalMeatCount = 0;
-        List<ItemEntity> meatDrops = new ArrayList<>();
-
-        for (ItemEntity drop : event.getDrops()) {
+        for (Iterator<ItemEntity> iterator = event.getDrops().iterator(); iterator.hasNext(); ) {
+            ItemEntity drop = iterator.next();
             ItemStack stack = drop.getItem();
             if (isMeatItem(stack)) {
                 totalMeatCount += stack.getCount();
-                meatDrops.add(drop);
+                iterator.remove();
+                drop.discard();
             }
-        }
-
-        
-        for (ItemEntity drop : meatDrops) {
-            event.getDrops().remove(drop);
-            drop.discard();
         }
 
         

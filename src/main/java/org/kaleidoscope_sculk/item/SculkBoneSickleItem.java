@@ -66,32 +66,40 @@ public class SculkBoneSickleItem extends SickleItem {
             return InteractionResult.SUCCESS;
         }
 
-        BlockPos pos = context.getClickedPos();
+        BlockPos clickedPos = context.getClickedPos();
         ItemStack stack = context.getItemInHand();
+
+        int centerX = clickedPos.getX();
+        int centerY = clickedPos.getY();
+        int centerZ = clickedPos.getZ();
+
+        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
         int breakCount = 0;
         for (int x = -HARVEST_RADIUS_XZ; x <= HARVEST_RADIUS_XZ; x++) {
             for (int y = 0; y <= HARVEST_HEIGHT; y++) {
                 for (int z = -HARVEST_RADIUS_XZ; z <= HARVEST_RADIUS_XZ; z++) {
-                    if (harvest(pos, x, y, z, level, player, stack)) {
+                    mutablePos.set(centerX + x, centerY + y, centerZ + z);
+                    if (harvest(level, player, stack, mutablePos)) {
                         breakCount++;
                     }
                 }
             }
         }
 
-        serverLevel.playSound(null,
-                player.getX(), player.getY(), player.getZ(),
-                SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(),
-                1.0F, 1.0F);
-        player.sweepAttack();
-        stack.hurtAndBreak(breakCount, player, EquipmentSlot.MAINHAND);
+        if (breakCount > 0) {
+            serverLevel.playSound(null,
+                    player.getX(), player.getY(), player.getZ(),
+                    SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(),
+                    1.0F, 1.0F);
+            player.sweepAttack();
+            stack.hurtAndBreak(breakCount, player, EquipmentSlot.MAINHAND);
+        }
         player.getCooldowns().addCooldown(this, 7);
         return InteractionResult.SUCCESS;
     }
 
-    private boolean harvest(BlockPos pos, int x, int y, int z, Level level, Player player, ItemStack stack) {
-        BlockPos newPos = pos.offset(x, y, z);
-        BlockState blockState = level.getBlockState(newPos);
+    private boolean harvest(Level level, Player player, ItemStack stack, BlockPos pos) {
+        BlockState blockState = level.getBlockState(pos);
         if (blockState.isAir()) {
             return false;
         }
@@ -101,14 +109,16 @@ public class SculkBoneSickleItem extends SickleItem {
             return false;
         }
 
-        if (!level.mayInteract(player, newPos)) {
+        if (!level.mayInteract(player, pos)) {
             return false;
         }
         if (blockState.is(TagMod.SICKLE_HARVEST_BLACKLIST)) {
             return false;
         }
 
-        SickleHarvestEvent event = new SickleHarvestEvent(player, stack, newPos, blockState);
+        BlockPos targetPos = pos.immutable();
+
+        SickleHarvestEvent event = new SickleHarvestEvent(player, stack, targetPos, blockState);
         if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
             return event.isCostDurability();
         }
@@ -116,29 +126,27 @@ public class SculkBoneSickleItem extends SickleItem {
         if (block instanceof CropBlock cropBlock) {
             if (block instanceof RiceCropBlock) {
                 int position = blockState.getValue(RiceCropBlock.LOCATION);
-                newPos = newPos.below(position);
-                blockState = level.getBlockState(newPos);
+                targetPos = targetPos.below(position);
+                blockState = level.getBlockState(targetPos);
             }
             if (cropBlock.isMaxAge(blockState)) {
-                cropBlock.playerDestroy(level, player, newPos, blockState, null, ItemStack.EMPTY);
+                cropBlock.playerDestroy(level, player, targetPos, blockState, null, ItemStack.EMPTY);
                 BlockState stateForAge = cropBlock.getStateForAge(0);
                 BooleanProperty waterlogged = BlockStateProperties.WATERLOGGED;
                 if (stateForAge.hasProperty(waterlogged)) {
                     stateForAge = stateForAge.setValue(waterlogged, blockState.getValue(waterlogged));
                 }
-                level.setBlock(newPos, stateForAge, Block.UPDATE_ALL);
-                level.levelEvent(null, LevelEvent.PARTICLES_DESTROY_BLOCK, newPos, Block.getId(blockState));
+                level.setBlock(targetPos, stateForAge, Block.UPDATE_ALL);
+                level.levelEvent(null, LevelEvent.PARTICLES_DESTROY_BLOCK, targetPos, Block.getId(blockState));
                 return true;
             }
             return false;
         }
 
-        if (block instanceof BushBlock) {
-            if (player instanceof ServerPlayer serverPlayer) {
-                serverPlayer.gameMode.destroyBlock(newPos);
-                level.levelEvent(null, LevelEvent.PARTICLES_DESTROY_BLOCK, newPos, Block.getId(blockState));
-                return true;
-            }
+        if (player instanceof ServerPlayer serverPlayer) {
+            serverPlayer.gameMode.destroyBlock(targetPos);
+            level.levelEvent(null, LevelEvent.PARTICLES_DESTROY_BLOCK, targetPos, Block.getId(blockState));
+            return true;
         }
         return false;
     }

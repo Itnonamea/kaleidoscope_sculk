@@ -38,6 +38,12 @@ public class SoulSailItem extends Item implements Equipable {
     private static final int BAR_SEGMENTS = 20;
     private static final float SOUL_DROP_CHANCE = 0.3f;
 
+    private static final Component BAR_FULL =
+            Component.translatable("item.kaleidoscope_sculk.soul_sail.bar_full").withStyle(ChatFormatting.YELLOW);
+
+    private static final Component USAGE =
+            Component.translatable("item.kaleidoscope_sculk.soul_sail.usage").withStyle(ChatFormatting.YELLOW);
+
     private static Map<SailType, String[]> progressBars;
 
     private static String[] progressBars(SailType type) {
@@ -64,6 +70,8 @@ public class SoulSailItem extends Item implements Equipable {
     private final SailType type;
     private final int maxLevel;
     private final int maxXp;
+
+    private volatile String descriptionId;
 
     public SoulSailItem(Properties properties, SailType type) {
         super(properties);
@@ -443,24 +451,21 @@ public class SoulSailItem extends Item implements Equipable {
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, context, tooltip, flag);
 
+        SailType sailType = this.type;
         boolean isFull = isFullItem(stack);
         int storedXp = getStoredXp(stack);
         int storedLevel = xpToLevel(storedXp);
 
         if (isFull) {
-            tooltip.add(Component.translatable("item.kaleidoscope_sculk.soul_sail.full_title", named())
-                    .withStyle(ChatFormatting.YELLOW));
+            tooltip.add(sailType.fullTitle);
         } else {
-            tooltip.add(Component.translatable("item.kaleidoscope_sculk.soul_sail.title", named())
-                    .withStyle(this.type.color));
-            tooltip.add(Component.translatable("item.kaleidoscope_sculk.soul_sail." + this.type.name + ".tooltip")
-                    .withStyle(ChatFormatting.GRAY));
+            tooltip.add(sailType.title);
+            tooltip.add(sailType.description);
         }
 
         MutableComponent bar = Component.literal(buildProgressBar(storedXp, isFull));
         if (isFull) {
-            bar.append(Component.translatable("item.kaleidoscope_sculk.soul_sail.bar_full")
-                    .withStyle(ChatFormatting.YELLOW));
+            bar.append(BAR_FULL);
         }
         tooltip.add(bar);
 
@@ -473,14 +478,12 @@ public class SoulSailItem extends Item implements Equipable {
 
         tooltip.add(Component.empty());
         if (isFull || storedXp > 0) {
-            tooltip.add(Component.translatable("item.kaleidoscope_sculk.soul_sail.usage")
-                    .withStyle(ChatFormatting.YELLOW));
+            tooltip.add(USAGE);
         }
 
         tooltip.add(Component.empty());
-        if (this.type == SailType.MYRIAD) {
-            tooltip.add(Component.translatable("item.kaleidoscope_sculk.soul_sail.final_form")
-                    .withStyle(ChatFormatting.GOLD));
+        if (sailType == SailType.MYRIAD) {
+            tooltip.add(sailType.finalForm);
         } else {
             if (!isFull) {
                 int needLevel = this.maxLevel - storedLevel;
@@ -489,7 +492,7 @@ public class SoulSailItem extends Item implements Equipable {
                         needLevel, format(needXp)).withStyle(ChatFormatting.GRAY));
             }
             tooltip.add(Component.translatable("item.kaleidoscope_sculk.soul_sail.upgrade_hint",
-                    getNextTierComponent()).withStyle(ChatFormatting.GRAY));
+                    sailType.nextTier).withStyle(ChatFormatting.GRAY));
         }
     }
 
@@ -501,16 +504,8 @@ public class SoulSailItem extends Item implements Equipable {
         return progressBars(this.type)[filled];
     }
 
-    private Component getNextTierComponent() {
-        return switch (this.type) {
-            case SOUL -> Component.translatable("item.kaleidoscope_sculk.soul_sail.tier.thousand");
-            case THOUSAND -> Component.translatable("item.kaleidoscope_sculk.soul_sail.tier.myriad");
-            case MYRIAD -> Component.translatable("item.kaleidoscope_sculk.soul_sail.tier.final");
-        };
-    }
-
     private Component named() {
-        return Component.translatable("item.kaleidoscope_sculk.soul_sail." + this.type.name);
+        return this.type.label;
     }
 
     private static String format(int value) {
@@ -541,24 +536,48 @@ public class SoulSailItem extends Item implements Equipable {
 
     @Override
     public String getDescriptionId(ItemStack stack) {
-        return super.getDescriptionId(stack) + "." + this.type.name;
+        String id = this.descriptionId;
+        if (id == null) {
+            id = super.getDescriptionId(stack) + "." + this.type.name;
+            this.descriptionId = id;
+        }
+        return id;
     }
 
     public enum SailType {
-        SOUL("soul", LEVEL_SOUL, ChatFormatting.BLUE, "§b"),
-        THOUSAND("thousand", LEVEL_THOUSAND, ChatFormatting.DARK_PURPLE, "§5"),
-        MYRIAD("myriad", LEVEL_MYRIAD, ChatFormatting.GOLD, "§6");
+        SOUL("soul", LEVEL_SOUL, ChatFormatting.BLUE, "§b", "thousand"),
+        THOUSAND("thousand", LEVEL_THOUSAND, ChatFormatting.DARK_PURPLE, "§5", "myriad"),
+        MYRIAD("myriad", LEVEL_MYRIAD, ChatFormatting.GOLD, "§6", "final");
 
         public final String name;
         public final int maxLevel;
         public final ChatFormatting color;
         public final String barColor;
 
-        SailType(String name, int maxLevel, ChatFormatting color, String barColor) {
+        public final Component label;
+        public final Component fullTitle;
+        public final Component title;
+        public final Component description;
+        public final Component nextTier;
+        public final Component finalForm;
+
+        SailType(String name, int maxLevel, ChatFormatting color, String barColor, String nextTierKey) {
             this.name = name;
             this.maxLevel = maxLevel;
             this.color = color;
             this.barColor = barColor;
+
+            Component label = Component.translatable("item.kaleidoscope_sculk.soul_sail." + name);
+            this.label = label;
+            this.fullTitle = Component.translatable("item.kaleidoscope_sculk.soul_sail.full_title", label)
+                    .withStyle(ChatFormatting.YELLOW);
+            this.title = Component.translatable("item.kaleidoscope_sculk.soul_sail.title", label)
+                    .withStyle(color);
+            this.description = Component.translatable("item.kaleidoscope_sculk.soul_sail." + name + ".tooltip")
+                    .withStyle(ChatFormatting.GRAY);
+            this.nextTier = Component.translatable("item.kaleidoscope_sculk.soul_sail.tier." + nextTierKey);
+            this.finalForm = Component.translatable("item.kaleidoscope_sculk.soul_sail.final_form")
+                    .withStyle(ChatFormatting.GOLD);
         }
 
         public static SailType fromName(String name) {

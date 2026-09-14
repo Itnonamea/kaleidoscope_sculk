@@ -91,11 +91,12 @@ public record SonicBoomPacket() implements CustomPacketPayload {
 
         int lastParticleStep = -1;
 
+        float decayedDamage = baseDamage;
+        float decayFactor = 1.0f - damageDecay;
+
         for (int i = 0; i < hits.size(); i++) {
             EntityHit hit = hits.get(i);
-            float currentDamage = baseDamage * (float) Math.pow(1.0f - damageDecay, i);
-
-            if (currentDamage <= 0.5f) break; 
+            if (decayedDamage <= 0.5f) break;
 
             
             Vec3 targetPos = hit.entity().getEyePosition();
@@ -103,26 +104,32 @@ public record SonicBoomPacket() implements CustomPacketPayload {
             double distance = startPos.distanceTo(targetPos);
             int steps = Mth.floor(distance) + 7;
 
+            double stepX = direction.x;
+            double stepY = direction.y;
+            double stepZ = direction.z;
             for (int j = 1; j < steps; ++j) {
-                int stepKey = (int) (j / 2.0); 
+                int stepKey = j >> 1;
                 if (stepKey <= lastParticleStep) continue;
-                Vec3 particlePos = startPos.add(direction.scale(j));
                 level.sendParticles(ParticleTypes.SONIC_BOOM,
-                        particlePos.x, particlePos.y, particlePos.z,
+                        startPos.x + stepX * j, startPos.y + stepY * j, startPos.z + stepZ * j,
                         1, 0.0, 0.0, 0.0, 0.0);
                 lastParticleStep = stepKey;
             }
 
             
-            hit.entity().hurt(level.damageSources().sonicBoom(player), currentDamage);
+            hit.entity().hurt(level.damageSources().sonicBoom(player), decayedDamage);
+            decayedDamage *= decayFactor;
         }
 
         
         if (hits.isEmpty()) {
+            double step = range / 20;
             for (int j = 1; j <= 20; j++) {
-                Vec3 particlePos = startPos.add(lookVec.scale(j * (range / 20)));
+                double offset = j * step;
                 level.sendParticles(ParticleTypes.SONIC_BOOM,
-                        particlePos.x, particlePos.y, particlePos.z,
+                        startPos.x + lookVec.x * offset,
+                        startPos.y + lookVec.y * offset,
+                        startPos.z + lookVec.z * offset,
                         1, 0.0, 0.0, 0.0, 0.0);
             }
         }

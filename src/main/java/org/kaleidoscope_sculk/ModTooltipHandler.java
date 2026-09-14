@@ -43,37 +43,47 @@ public class ModTooltipHandler {
                 Component.translatable("item.kaleidoscope_sculk." + key + ".tooltip").withStyle(color));
     }
 
+    private static Map<Item, List<Component>> multiLineTooltips;
+
+    private static Map<Item, List<Component>> multiLineTooltips() {
+        Map<Item, List<Component>> cached = multiLineTooltips;
+        if (cached == null) {
+            cached = Map.ofEntries(
+                    Map.entry(ModItems.SCULK_CATERPILLAR.get(), List.of(
+                            Component.empty(),
+                            Component.translatable("item.kaleidoscope_sculk.echo")
+                                    .withStyle(ChatFormatting.BLUE))),
+                    Map.entry(ModItems.ANCIENT_BRITTLE_BONE_FRAGMENTS.get(), List.of(
+                            Component.empty(),
+                            Component.translatable("item.kaleidoscope_sculk.strengthII1800")
+                                    .withStyle(ChatFormatting.BLUE))),
+                    Map.entry(ModItems.SOUL_PANCAKE.get(), List.of(
+                            Component.translatable("item.kaleidoscope_sculk.soul_pancake.tooltip")
+                                    .withStyle(ChatFormatting.DARK_GRAY),
+                            Component.empty(),
+                            Component.translatable("item.kaleidoscope_sculk.resistance")
+                                    .withStyle(ChatFormatting.BLUE),
+                            Component.translatable("item.kaleidoscope_sculk.regeneration")
+                                    .withStyle(ChatFormatting.BLUE)))
+            );
+            multiLineTooltips = cached;
+        }
+        return cached;
+    }
+
     @SubscribeEvent
     public static void onItemTooltip(ItemTooltipEvent event) {
-        ItemStack itemStack = event.getItemStack();
+        Item item = event.getItemStack().getItem();
         List<Component> tooltip = event.getToolTip();
 
-        Component simpleLine = simpleTooltips().get(itemStack.getItem());
+        Component simpleLine = simpleTooltips().get(item);
         if (simpleLine != null) {
             tooltip.add(TOOLTIP_INDEX, simpleLine);
         }
 
-        if (itemStack.is(ModItems.SCULK_CATERPILLAR.get())) {
-            tooltip.add(TOOLTIP_INDEX, Component.empty());
-            tooltip.add(TOOLTIP_INDEX + 1, Component.translatable("item.kaleidoscope_sculk.echo")
-                    .withStyle(ChatFormatting.BLUE));
+        List<Component> extraLines = multiLineTooltips().get(item);
+        if (extraLines != null) {
+            tooltip.addAll(TOOLTIP_INDEX, extraLines);
         }
-
-        if (itemStack.is(ModItems.ANCIENT_BRITTLE_BONE_FRAGMENTS.get())) {
-            tooltip.add(TOOLTIP_INDEX, Component.empty());
-            tooltip.add(TOOLTIP_INDEX + 1, Component.translatable("item.kaleidoscope_sculk.strengthII1800")
-                    .withStyle(ChatFormatting.BLUE));
-        }
-
-        if (itemStack.is(ModItems.SOUL_PANCAKE.get())) {
-            tooltip.add(TOOLTIP_INDEX, Component.translatable("item.kaleidoscope_sculk.soul_pancake.tooltip")
-                    .withStyle(ChatFormatting.DARK_GRAY));
-            tooltip.add(TOOLTIP_INDEX + 1, Component.empty());
-            tooltip.add(TOOLTIP_INDEX + 2, Component.translatable("item.kaleidoscope_sculk.resistance")
-                    .withStyle(ChatFormatting.BLUE));
-            tooltip.add(TOOLTIP_INDEX + 3, Component.translatable("item.kaleidoscope_sculk.regeneration")
-                    .withStyle(ChatFormatting.BLUE));
-        }
-
     }
 }
