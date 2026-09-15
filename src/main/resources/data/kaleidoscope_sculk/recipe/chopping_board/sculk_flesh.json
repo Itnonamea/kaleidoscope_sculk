@@ -1,6 +1,6 @@
 {
   "type": "kaleidoscope_cookery:chopping_board",
-  "cut_count": 2,
+  "cut_count": 3,
   "ingredient": {
     "item": "kaleidoscope_sculk:sculk_pinapple"
   },

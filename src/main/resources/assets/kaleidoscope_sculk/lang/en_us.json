@@ -17,6 +17,7 @@
   "effect.kaleidoscope_sculk.echo": "Echo",
   "effect.kaleidoscope_sculk.sculk_dash": "Sculk Dash",
   "effect.kaleidoscope_sculk.sonic_wave": "Sonic Wave",
+  "fluid_type.kaleidoscope_sculk.sculk_juice": "Sculk Juice",
   "item.kaleidoscope_sculk.ancient_bone_fragment": "Ancient Bone Fragment",
   "item.kaleidoscope_sculk.ancient_bone_fragment.tooltip": "A fragment from the Warden's ancient bones",
   "item.kaleidoscope_sculk.ancient_brittle_bone_fragments": "Ancient Brittle Bone Fragments",
