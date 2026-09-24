@@ -18,10 +18,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.kaleidoscope_sculk.Kaleidoscope_sculk;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.DrinkBlock;
-import org.kaleidoscope_sculk.block.DeepslateCakeBlock;
-import org.kaleidoscope_sculk.block.DeepslateStoveBlock;
-import org.kaleidoscope_sculk.block.EchoCropBlock;
-import org.kaleidoscope_sculk.block.EchoCropTopBlock;
+import org.kaleidoscope_sculk.block.DeepslateBlocks;
+import org.kaleidoscope_sculk.block.EchoCrops;
 import org.kaleidoscope_sculk.block.FoodBiteBlock;
 
 public class ModBlocks {
@@ -29,8 +27,8 @@ public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS =
             DeferredRegister.create(Registries.BLOCK, Kaleidoscope_sculk.MODID);
 
-    
-    public static final int MUSTARD_DURATION = 6000; 
+
+    public static final int MUSTARD_DURATION = 6000;
 
     public static final VoxelShape SHAPE_MEDIUM = Block.box(4.0, 0.0, 4.0, 12.0, 7.0, 12.0);
     public static final VoxelShape PLATE = Block.box(1.0, 0.0, 1.0, 15.0, 2.0, 15.0);
@@ -46,7 +44,7 @@ public class ModBlocks {
             Block.box(1.0, 0.0, 1.0, 15.0, 1.0, 15.0)
     );
 
-    
+
     public static final DeferredHolder<Block, DrinkBlock> SCULK_BREW_BOTTLE =
             BLOCKS.register("sculk_brew_bottle", () -> new DrinkBlock(
                     4,
@@ -72,9 +70,9 @@ public class ModBlocks {
                     Block.box(1, 0, 1, 15, 14, 15)
             ));
 
-    
-    public static final DeferredHolder<Block, DeepslateCakeBlock> DEEPSLATE_CAKE =
-            BLOCKS.register("deepslate_cake", () -> new DeepslateCakeBlock(
+
+    public static final DeferredHolder<Block, DeepslateBlocks.Cake> DEEPSLATE_CAKE =
+            BLOCKS.register("deepslate_cake", () -> new DeepslateBlocks.Cake(
                     Block.Properties.of()
                             .sound(SoundType.DEEPSLATE)
                             .strength(0.5f)
@@ -82,9 +80,9 @@ public class ModBlocks {
                             .instabreak()
             ));
 
-    
-    public static final DeferredHolder<Block, DeepslateStoveBlock> DEEPSLATE_STOVE =
-            BLOCKS.register("deepslate_stove", () -> new DeepslateStoveBlock());
+
+    public static final DeferredHolder<Block, DeepslateBlocks.Stove> DEEPSLATE_STOVE =
+            BLOCKS.register("deepslate_stove", () -> new DeepslateBlocks.Stove());
 
     public static final DeferredHolder<Block, FoodBiteBlock> ANCIENT_CITY_STYLE_SASHIMI_BLOCK =
             BLOCKS.register("ancient_city_style_sashimi", () -> new FoodBiteBlock(
@@ -123,7 +121,7 @@ public class ModBlocks {
                             .effect(() -> new MobEffectInstance(WARMTH.getDelegate(), 2400, 0), 1.0f)
                             .effect(() -> new MobEffectInstance(ModEffects.ECHO.getDelegate(), 3600, 0), 1.0f)
                             .build(),
-                    3,
+                    4,
                     SHAPE_MEDIUM_WITH_MAT,
                     Items.FLOWER_POT
             ));
@@ -155,8 +153,8 @@ public class ModBlocks {
                     Items.BOWL
             ));
 
-    public static final DeferredHolder<Block, EchoCropBlock> ECHO_CROP =
-            BLOCKS.register("echo_crop", () -> new EchoCropBlock(
+    public static final DeferredHolder<Block, EchoCrops.Bottom> ECHO_CROP =
+            BLOCKS.register("echo_crop", () -> new EchoCrops.Bottom(
                     Block.Properties.of()
                             .noCollission()
                             .randomTicks()
@@ -164,8 +162,8 @@ public class ModBlocks {
                             .noOcclusion()
             ));
 
-    public static final DeferredHolder<Block, EchoCropTopBlock> ECHO_CROP_TOP =
-            BLOCKS.register("echo_crop_top", () -> new EchoCropTopBlock(
+    public static final DeferredHolder<Block, EchoCrops.Top> ECHO_CROP_TOP =
+            BLOCKS.register("echo_crop_top", () -> new EchoCrops.Top(
                     Block.Properties.of()
                             .noCollission()
                             .randomTicks()
@@ -173,12 +171,12 @@ public class ModBlocks {
                             .noOcclusion()
             ));
 
-    
+
     public static Holder<MobEffect> getMustardEffect() {
         return MUSTARD.getDelegate();
     }
 
-    
+
     public static MobEffectInstance createMustardEffect() {
         return new MobEffectInstance(MUSTARD.getDelegate(), MUSTARD_DURATION, 0);
     }

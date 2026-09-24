@@ -1,0 +1,13 @@
+{
+  "type": "kaleidoscope_cookery:teapot",
+  "ingredient": {
+    "item": "kaleidoscope_sculk:echo_puer_tea_bag"
+  },
+  "ingredient_count": 1,
+  "result": {
+    "count": 1,
+    "id": "kaleidoscope_sculk:echo_puer"
+  },
+  "tea_fluid": "minecraft:water",
+  "time": 240
+}

@@ -1,14 +1,21 @@
 package org.kaleidoscope_sculk.register;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
@@ -17,10 +24,13 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import com.github.ysbbbbbb.kaleidoscopecookery.init.registry.TeacupRegistry;
 import com.github.ysbbbbbb.kaleidoscopecookery.item.BowlFoodOnlyItem;
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IBarrel;
 import com.github.ysbbbbbb.kaleidoscopetavern.item.BottleBlockItem;
@@ -28,13 +38,8 @@ import com.github.ysbbbbbb.kaleidoscopetavern.item.DrinkBlockItem;
 import org.kaleidoscope_sculk.Kaleidoscope_sculk;
 import org.kaleidoscope_sculk.entity.AncientBoneFragmentProjectile;
 import org.kaleidoscope_sculk.item.DeepslateCakeSliceItem;
-import org.kaleidoscope_sculk.item.EchoSeedItem;
-import org.kaleidoscope_sculk.item.ErosionKnifeItem;
-import org.kaleidoscope_sculk.item.FoodBlockItem;
-import org.kaleidoscope_sculk.item.SculkBranchItem;
-import org.kaleidoscope_sculk.item.SilentKitchenKnife;
 import org.kaleidoscope_sculk.item.SculkBoneSickleItem;
-import org.kaleidoscope_sculk.item.SoulItem;
+import org.kaleidoscope_sculk.item.SimpleItems;
 import org.kaleidoscope_sculk.item.SoulSailItem;
 
 import static com.github.ysbbbbbb.kaleidoscopecookery.init.ModEffects.VIGOR;
@@ -42,6 +47,12 @@ import static com.github.ysbbbbbb.kaleidoscopecookery.init.ModEffects.VIGOR;
 public class ModItems {
 
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Kaleidoscope_sculk.MODID);
+
+    /** Items that can act as a kitchen knife (used to scrape sculk blocks). */
+    public static final TagKey<Item> KITCHEN_KNIVES = TagKey.create(
+            Registries.ITEM,
+            ResourceLocation.fromNamespaceAndPath(Kaleidoscope_sculk.MODID, "kitchen_knives")
+    );
 
     public static ItemStack maxLevelDrink(DeferredItem<? extends Item> item) {
         ItemStack stack = item.get().getDefaultInstance();
@@ -52,13 +63,13 @@ public class ModItems {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Kaleidoscope_sculk.MODID);
 
-    
-    public static final DeferredItem<FoodBlockItem> SCULK_STEW_BLOCK_ITEM = ITEMS.register(
+
+    public static final DeferredItem<SimpleItems.FoodBlock> SCULK_STEW_BLOCK_ITEM = ITEMS.register(
             "sculk_stew_block",
-            () -> new FoodBlockItem(ModBlocks.SCULK_STEW_BLOCK.get())
+            () -> new SimpleItems.FoodBlock(ModBlocks.SCULK_STEW_BLOCK.get())
     );
 
-    
+
     public static final DeferredItem<BlockItem> DEEPSLATE_STOVE = ITEMS.registerItem(
             "deepslate_stove",
             properties -> new BlockItem(ModBlocks.DEEPSLATE_STOVE.get(), properties),
@@ -70,10 +81,10 @@ public class ModItems {
                     .title(Component.translatable("itemGroup." + Kaleidoscope_sculk.MODID))
                     .icon(() -> new ItemStack(ModItems.COOKED_WARDEN_TENDRIL_BOWL.get()))
                     .displayItems((parameters, output) -> {
-                        
+
                         output.accept(ModItems.DEEPSLATE_STOVE.get());
 
-                        
+
                         output.accept(ModItems.WARDEN_TENDRIL.get());
                         output.accept(ModItems.ANCIENT_BONE_FRAGMENT.get());
                         output.accept(ModItems.SCULK_FUNGUS.get());
@@ -91,10 +102,10 @@ public class ModItems {
                         output.accept(ModItems.SILENT_KITCHEN_KNIFE.get());
                         output.accept(ModItems.SCULK_BONE_SICKLE.get());
 
-                        
+
                         output.accept(ModItems.ECHO_SEED.get());
 
-                        
+
                         output.accept(ModItems.SCULK_FLESH.get());
 
                         output.accept(ModItems.SCULK_FUNGUS_SOUP.get());
@@ -102,14 +113,13 @@ public class ModItems {
                         output.accept(ModItems.ANCIENT_BRITTLE_BONE_FRAGMENTS.get());
                         output.accept(ModItems.PORK_ANCIENT_BONE_SOUP.get());
                         output.accept(ModItems.SOUL_PANCAKE.get());
+                        output.accept(ModItems.SCULK_MOONCAKE.get());
                         output.accept(ModItems.COOKED_EERIE_MEAT.get());
 
-                        
-                        output.accept(ModItems.SOUL_SAIL.get());
-                        output.accept(ModItems.THOUSAND_SOUL_SAIL.get());
-                        output.accept(ModItems.MYRIAD_SOUL_SAIL.get());
 
-                        
+                        output.accept(ModItems.SOUL_SAIL.get());
+
+
                         output.accept(ModItems.SCULK_STEW_BLOCK_ITEM.get());
                         output.accept(ModItems.SCULK_PORK_RIBS_BLOCK_ITEM.get());
                         output.accept(ModItems.SCULK_CHICKEN_STEW_BLOCK_ITEM.get());
@@ -118,15 +128,20 @@ public class ModItems {
 
                         output.accept(ModItems.DEEPSLATE_CAKE_SLICE.get());
                         output.accept(ModItems.SCULK_JUICE_BUCKET.get());
+                        output.accept(ModItems.ECHO_PUER_TEA_BAG.get());
+                        Item echoPuer = TeacupRegistry.getItem(ModRegistries.ECHO_PUER);
+                        if (echoPuer != Items.AIR) {
+                            output.accept(echoPuer);
+                        }
                         output.accept(ModItems.maxLevelDrink(ModItems.HUADIAO_WINE));
                         output.accept(ModItems.maxLevelDrink(ModItems.HONGLAN_WINE));
 
-                        
+
                         output.accept(ModItems.maxLevelDrink(ModItems.SCULK_BREW));
                     })
                     .build());
 
-    
+
     public static final DeferredItem<DrinkBlockItem> SCULK_BREW = ITEMS.register(
             "sculk_brew",
             () -> new DrinkBlockItem(ModBlocks.SCULK_BREW_BOTTLE.get())
@@ -142,35 +157,33 @@ public class ModItems {
             () -> new DrinkBlockItem(ModBlocks.HONGLAN_WINE.get())
     );
 
-    
+
     public static final DeferredItem<BucketItem> SCULK_JUICE_BUCKET = ITEMS.register(
             "sculk_juice_bucket",
-            () -> new BucketItem(ModFluids.SCULK_JUICE.get(),
+            () -> new BucketItem(ModRegistries.SCULK_JUICE.get(),
                     new Item.Properties().stacksTo(16).craftRemainder(Items.BUCKET))
     );
 
-    
+
     public static final DeferredItem<Item> SOUL_SAIL =
-            ITEMS.register("soul_sail", () -> new SoulSailItem(new Item.Properties(), SoulSailItem.SailType.SOUL));
+            ITEMS.register("soul_sail", () -> new SoulSailItem(soulSailProperties()));
 
-    public static final DeferredItem<Item> SOUL_SAIL_FULL =
-            ITEMS.register("soul_sail_full", () -> new SoulSailItem(new Item.Properties(), SoulSailItem.SailType.SOUL));
+    /**
+     * Soul Sail: 4 armor, no durability, unbreakable, equipped in the head slot.
+     */
+    private static Item.Properties soulSailProperties() {
+        return new Item.Properties()
+                .stacksTo(1)
+                .component(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.builder()
+                        .add(Attributes.ARMOR,
+                                new AttributeModifier(
+                                        ResourceLocation.fromNamespaceAndPath(Kaleidoscope_sculk.MODID, "soul_sail_armor"),
+                                        4.0D, AttributeModifier.Operation.ADD_VALUE),
+                                EquipmentSlotGroup.HEAD)
+                        .build());
+    }
 
-    
-    public static final DeferredItem<Item> THOUSAND_SOUL_SAIL =
-            ITEMS.register("thousand_soul_sail", () -> new SoulSailItem(new Item.Properties(), SoulSailItem.SailType.THOUSAND));
 
-    public static final DeferredItem<Item> THOUSAND_SOUL_SAIL_FULL =
-            ITEMS.register("thousand_soul_sail_full", () -> new SoulSailItem(new Item.Properties(), SoulSailItem.SailType.THOUSAND));
-
-    
-    public static final DeferredItem<Item> MYRIAD_SOUL_SAIL =
-            ITEMS.register("myriad_soul_sail", () -> new SoulSailItem(new Item.Properties(), SoulSailItem.SailType.MYRIAD));
-
-    public static final DeferredItem<Item> MYRIAD_SOUL_SAIL_FULL =
-            ITEMS.register("myriad_soul_sail_full", () -> new SoulSailItem(new Item.Properties(), SoulSailItem.SailType.MYRIAD));
-
-    
     public static final DeferredItem<BlockItem> DEEPSLATE_CAKE = ITEMS.registerItem(
             "deepslate_cake",
             properties -> new BlockItem(ModBlocks.DEEPSLATE_CAKE.get(), properties),
@@ -183,34 +196,34 @@ public class ModItems {
             new Item.Properties()
     );
 
-    
-    public static final DeferredItem<FoodBlockItem> SCULK_LAMB_CHOP = ITEMS.register(
+
+    public static final DeferredItem<SimpleItems.FoodBlock> SCULK_LAMB_CHOP = ITEMS.register(
             "sculk_lamb_chop",
-            () -> new FoodBlockItem(ModBlocks.SCULK_LAMB_CHOP_BLOCK.get())
+            () -> new SimpleItems.FoodBlock(ModBlocks.SCULK_LAMB_CHOP_BLOCK.get())
     );
 
-    public static final DeferredHolder<Item, FoodBlockItem> ANCIENT_CITY_STYLE_SASHIMI =
+    public static final DeferredHolder<Item, SimpleItems.FoodBlock> ANCIENT_CITY_STYLE_SASHIMI =
             ITEMS.register("ancient_city_style_sashimi",
-                    () -> new FoodBlockItem(ModBlocks.ANCIENT_CITY_STYLE_SASHIMI_BLOCK.get())
+                    () -> new SimpleItems.FoodBlock(ModBlocks.ANCIENT_CITY_STYLE_SASHIMI_BLOCK.get())
             );
 
-    
+
     public static final DeferredItem<Item> SILENT_UPGRADE_SMITHING_TEMPLATE = ITEMS.registerItem(
             "silent_upgrade_smithing_template",
             properties -> new Item(properties),
             new Item.Properties()
     );
 
-    
-    public static final DeferredItem<SilentKitchenKnife> SILENT_KITCHEN_KNIFE = ITEMS.register(
+
+    public static final DeferredItem<SimpleItems.SilentKnife> SILENT_KITCHEN_KNIFE = ITEMS.register(
             "silent_kitchen_knife",
-            SilentKitchenKnife::new  
+            SimpleItems.SilentKnife::new
     );
 
     public static final DeferredItem<SculkBoneSickleItem> SCULK_BONE_SICKLE =
             ITEMS.register("sculk_bone_sickle", SculkBoneSickleItem::new);
 
-    
+
     public static final DeferredItem<Item> COOKED_EERIE_MEAT = ITEMS.registerItem(
             "cooked_eerie_meat",
             Item::new,
@@ -221,7 +234,7 @@ public class ModItems {
                             .build())
     );
 
-    
+
     public static final DeferredItem<Item> SCULK_PINAPPLE = ITEMS.registerItem(
             "sculk_pinapple",
             Item::new,
@@ -238,42 +251,48 @@ public class ModItems {
             new Item.Properties()
     );
 
-    
+    public static final DeferredItem<Item> ECHO_PUER_TEA_BAG = ITEMS.registerItem(
+            "echo_puer_tea_bag",
+            Item::new,
+            new Item.Properties()
+    );
+
+
     public static final DeferredItem<Item> SCULK_DOUGH = ITEMS.registerItem(
             "sculk_dough",
             Item::new,
             new Item.Properties()
     );
 
-    
+
     public static final DeferredItem<Item> SOUL = ITEMS.registerItem(
             "soul",
-            SoulItem::new,
+            SimpleItems.Soul::new,
             new Item.Properties()
                     .stacksTo(64)
     );
 
-    
+
     public static final DeferredItem<Item> SCULK_BRANCH = ITEMS.registerItem(
             "sculk_branch",
-            SculkBranchItem::new,
+            Item::new,
             new Item.Properties()
                     .stacksTo(64)
     );
 
-    
-    public static final DeferredItem<ErosionKnifeItem> EROSION_KITCHEN_KNIFE = ITEMS.register(
+
+    public static final DeferredItem<SimpleItems.ErosionKnife> EROSION_KITCHEN_KNIFE = ITEMS.register(
             "erosion_knife",
-            ErosionKnifeItem::new
+            SimpleItems.ErosionKnife::new
     );
 
-    
-    public static final DeferredItem<FoodBlockItem> SCULK_CHICKEN_STEW_BLOCK_ITEM = ITEMS.register(
+
+    public static final DeferredItem<SimpleItems.FoodBlock> SCULK_CHICKEN_STEW_BLOCK_ITEM = ITEMS.register(
             "sculk_chicken_stew_block",
-            () -> new FoodBlockItem(ModBlocks.SCULK_CHICKEN_STEW_BLOCK.get())
+            () -> new SimpleItems.FoodBlock(ModBlocks.SCULK_CHICKEN_STEW_BLOCK.get())
     );
 
-    
+
     public static final DeferredItem<Item> EERIE_MEAT = ITEMS.registerItem(
             "eerie_meat",
             Item::new,
@@ -286,14 +305,14 @@ public class ModItems {
                             .build())
     );
 
-    
+
     public static final DeferredItem<Item> ECHO_SEED = ITEMS.registerItem(
             "echo_seed",
-            properties -> new EchoSeedItem(ModBlocks.ECHO_CROP.get(), properties),
+            properties -> new SimpleItems.EchoSeed(ModBlocks.ECHO_CROP.get(), properties),
             new Item.Properties()
     );
 
-    
+
     public static final DeferredItem<Item> WARDEN_TENDRIL = ITEMS.registerItem(
             "warden_tendril",
             Item::new,
@@ -305,7 +324,7 @@ public class ModItems {
                             .build())
     );
 
-    
+
     public static final DeferredItem<BowlFoodOnlyItem> BOIL_SCULK_PINAPPLE = ITEMS.register(
             "boil_sculk_pinapple",
             () -> new BowlFoodOnlyItem(new FoodProperties.Builder()
@@ -316,7 +335,7 @@ public class ModItems {
                     .build())
     );
 
-    
+
     public static final DeferredItem<BowlFoodOnlyItem> COOKED_WARDEN_TENDRIL_BOWL = ITEMS.register(
             "cooked_warden_tendril_bowl",
             () -> new BowlFoodOnlyItem(new FoodProperties.Builder()
@@ -328,19 +347,19 @@ public class ModItems {
                     .build())
     );
 
-    
+
     public static final DeferredItem<BowlFoodOnlyItem> PORK_ANCIENT_BONE_SOUP = ITEMS.register(
             "pork_ancient_bone_soup",
             () -> new BowlFoodOnlyItem(new FoodProperties.Builder()
                     .nutrition(6)
                     .saturationModifier(0.667f)
                     .alwaysEdible()
-                    .effect(() -> new MobEffectInstance(VIGOR.getDelegate(), 6000, 0), 1.0f)  
+                    .effect(() -> new MobEffectInstance(VIGOR.getDelegate(), 6000, 0), 1.0f)
                     .effect(() -> new MobEffectInstance(ModEffects.SONIC_WAVE.getDelegate(), 6000, 0), 1.0f)
                     .build())
     );
 
-    
+
     public static final DeferredItem<BowlFoodOnlyItem> SCULK_FUNGUS_SOUP = ITEMS.register(
             "sculk_fungus_soup",
             () -> new BowlFoodOnlyItem(new FoodProperties.Builder()
@@ -352,7 +371,7 @@ public class ModItems {
                     .build())
     );
 
-    
+
     public static final DeferredItem<Item> ANCIENT_BONE_FRAGMENT = ITEMS.registerItem(
             "ancient_bone_fragment",
             properties -> new Item(properties) {
@@ -380,7 +399,7 @@ public class ModItems {
                     .fireResistant()
     );
 
-    
+
     public static final DeferredItem<Item> SCULK_FUNGUS = ITEMS.registerItem(
             "sculk_fungus",
             Item::new,
@@ -392,7 +411,7 @@ public class ModItems {
                             .build())
     );
 
-    
+
     public static final DeferredItem<Item> SOUL_PANCAKE = ITEMS.registerItem(
             "soul_pancake",
             Item::new,
@@ -406,7 +425,7 @@ public class ModItems {
                             .build())
     );
 
-    
+
     public static final DeferredItem<Item> ANCIENT_BRITTLE_BONE_FRAGMENTS = ITEMS.registerItem(
             "ancient_brittle_bone_fragments",
             Item::new,
@@ -419,7 +438,7 @@ public class ModItems {
                             .build())
     );
 
-    
+
     public static final DeferredItem<Item> SCULK_CATERPILLAR = ITEMS.registerItem(
             "sculk_caterpillar",
             Item::new,
@@ -445,9 +464,48 @@ public class ModItems {
                             .build())
     );
 
-    
-    public static final DeferredItem<FoodBlockItem> SCULK_PORK_RIBS_BLOCK_ITEM = ITEMS.register(
+
+    public static final DeferredItem<SimpleItems.FoodBlock> SCULK_PORK_RIBS_BLOCK_ITEM = ITEMS.register(
             "sculk_pork_ribs_block",
-            () -> new FoodBlockItem(ModBlocks.SCULK_PORK_RIBS_BLOCK.get())
+            () -> new SimpleItems.FoodBlock(ModBlocks.SCULK_PORK_RIBS_BLOCK.get())
     );
+
+
+    public static final DeferredItem<Item> SCULK_MOONCAKE = ITEMS.registerItem(
+            "sculk_mooncake",
+            Item::new,
+            new Item.Properties()
+                    .food(new FoodProperties.Builder()
+                            .nutrition(14)
+                            .saturationModifier(1.2f)
+                            .alwaysEdible()
+                            .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 6000, 2), 1.0f)
+                            .build())
+    );
+
+    private static final ResourceKey<CreativeModeTab> COOKERY_MAIN_TAB = ResourceKey.create(
+            Registries.CREATIVE_MODE_TAB,
+            ResourceLocation.fromNamespaceAndPath("kaleidoscope_cookery", "cookery_main"));
+
+    private static final ResourceKey<CreativeModeTab> COOKERY_FOOD_TAB = ResourceKey.create(
+            Registries.CREATIVE_MODE_TAB,
+            ResourceLocation.fromNamespaceAndPath("kaleidoscope_cookery", "cookery_food"));
+
+    /**
+     * Cookery's creative tabs iterate over all teacup data and add every entry, so Echo Puer is included too.
+     * Remove it from Cookery's tabs here (this mod's own tab keeps it).
+     */
+    public static void onBuildCreativeTabContents(BuildCreativeModeTabContentsEvent event) {
+        ResourceKey<CreativeModeTab> key = event.getTabKey();
+        if (!key.equals(COOKERY_MAIN_TAB) && !key.equals(COOKERY_FOOD_TAB)) {
+            return;
+        }
+
+        Item echoPuer = TeacupRegistry.getItem(ModRegistries.ECHO_PUER);
+        if (echoPuer == Items.AIR) {
+            return;
+        }
+
+        event.remove(new ItemStack(echoPuer), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+    }
 }

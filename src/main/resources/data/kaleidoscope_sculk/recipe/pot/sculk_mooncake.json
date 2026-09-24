@@ -1,0 +1,28 @@
+{
+  "type": "kaleidoscope_cookery:pot",
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "kaleidoscope_chinesefood"
+    }
+  ],
+  "ingredients": [
+    {
+      "item": "kaleidoscope_chinesefood:mooncake"
+    },
+    {
+      "item": "kaleidoscope_sculk:warden_tendril"
+    },
+    {
+      "item": "kaleidoscope_sculk:warden_tendril"
+    },
+    {
+      "item": "kaleidoscope_sculk:warden_tendril"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "kaleidoscope_sculk:sculk_mooncake"
+  },
+  "stir_fry_count": 5
+}

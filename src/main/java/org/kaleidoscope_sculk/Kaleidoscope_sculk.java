@@ -9,15 +9,11 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
-import org.kaleidoscope_sculk.network.SonicBoomPacket;
+import org.kaleidoscope_sculk.network.ModPackets;
 import org.kaleidoscope_sculk.register.ModBlocks;
-import org.kaleidoscope_sculk.register.ModDamageTypes;
-import org.kaleidoscope_sculk.register.ModDataComponents;
 import org.kaleidoscope_sculk.register.ModEffects;
-import org.kaleidoscope_sculk.register.ModEntities;
-import org.kaleidoscope_sculk.register.ModFluids;
 import org.kaleidoscope_sculk.register.ModItems;
-import org.kaleidoscope_sculk.register.ModPotions;
+import org.kaleidoscope_sculk.register.ModRegistries;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Field;
@@ -39,28 +35,31 @@ public class Kaleidoscope_sculk {
             field.setAccessible(true);
             return field;
         } catch (NoSuchFieldException e) {
-            LOGGER.error("无法定位 BlockEntityType.validBlocks 字段，饮品方块注册将跳过", e);
+            LOGGER.error("Could not locate the BlockEntityType.validBlocks field; drink block registration will be skipped", e);
             return null;
         }
     }
 
     public Kaleidoscope_sculk(IEventBus modEventBus) {
+        ModRegistries.registerTeas();
+
         ModItems.ITEMS.register(modEventBus);
         ModItems.CREATIVE_TABS.register(modEventBus);
         ModEffects.MOB_EFFECTS.register(modEventBus);
-        ModEntities.ENTITY_TYPES.register(modEventBus);
+        ModRegistries.ENTITY_TYPES.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);
-        ModFluids.FLUID_TYPES.register(modEventBus);
-        ModFluids.FLUIDS.register(modEventBus);
-        ModPotions.POTIONS.register(modEventBus);
-        ModDataComponents.DATA_COMPONENTS.register(modEventBus);
-        ModDamageTypes.DAMAGE_TYPES.register(modEventBus);
+        ModRegistries.FLUID_TYPES.register(modEventBus);
+        ModRegistries.FLUIDS.register(modEventBus);
+        ModRegistries.POTIONS.register(modEventBus);
+        ModRegistries.DATA_COMPONENTS.register(modEventBus);
+        ModRegistries.DAMAGE_TYPES.register(modEventBus);
 
         modEventBus.addListener(this::onCommonSetup);
         modEventBus.addListener(this::registerPayloads);
+        modEventBus.addListener(ModItems::onBuildCreativeTabContents);
     }
 
-    
+
     @SuppressWarnings("unchecked")
     private void onCommonSetup(FMLCommonSetupEvent event) {
         if (VALID_BLOCKS_FIELD == null) {
@@ -80,15 +79,17 @@ public class Kaleidoscope_sculk {
                 newValidBlocks.add(ModBlocks.HONGLAN_WINE.get());
                 VALID_BLOCKS_FIELD.set(drinkBe, newValidBlocks);
 
-                LOGGER.info("已将 sculk_brew_bottle / huadiao_wine / honglan_wine 添加到 Tavern 的 DRINK_BE");
+                LOGGER.info("Added sculk_brew_bottle / huadiao_wine / honglan_wine to Tavern's DRINK_BE");
             } catch (Exception e) {
-                LOGGER.error("添加方块到 DRINK_BE 失败", e);
+                LOGGER.error("Failed to add blocks to Tavern's DRINK_BE", e);
             }
         });
     }
 
     private void registerPayloads(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar("1");
-        registrar.playToServer(SonicBoomPacket.TYPE, SonicBoomPacket.CODEC, SonicBoomPacket::handle);
+        registrar.playToServer(ModPackets.SonicBoom.TYPE, ModPackets.SonicBoom.CODEC, ModPackets.SonicBoom::handle);
+        registrar.playToServer(ModPackets.SoulSailAbsorb.TYPE, ModPackets.SoulSailAbsorb.CODEC,
+                ModPackets.SoulSailAbsorb::handle);
     }
 }

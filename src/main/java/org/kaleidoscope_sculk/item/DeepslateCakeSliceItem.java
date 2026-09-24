@@ -2,6 +2,7 @@ package org.kaleidoscope_sculk.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -21,9 +22,9 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import org.kaleidoscope_sculk.block.DeepslateCakeBlock;
+import org.kaleidoscope_sculk.block.DeepslateBlocks;
 import org.kaleidoscope_sculk.register.ModBlocks;
-import org.kaleidoscope_sculk.register.ModDamageTypes;
+import org.kaleidoscope_sculk.register.ModRegistries;
 
 import java.util.List;
 
@@ -53,8 +54,7 @@ public class DeepslateCakeSliceItem extends Item {
         BlockPos clickedPos = context.getClickedPos();
         BlockState clickedState = level.getBlockState(clickedPos);
 
-        
-        if (clickedState.getBlock() instanceof DeepslateCakeBlock) {
+        if (clickedState.getBlock() instanceof DeepslateBlocks.Cake) {
             return InteractionResult.PASS;
         }
 
@@ -63,14 +63,15 @@ public class DeepslateCakeSliceItem extends Item {
         ItemStack stack = context.getItemInHand();
 
         BlockState placeState = level.getBlockState(placePos);
-        if (!placeState.canBeReplaced() || !level.getBlockState(placePos.below()).isSolid()) {
+        if (!placeState.canBeReplaced()
+                || !level.getBlockState(placePos.below()).isFaceSturdy(level, placePos.below(), Direction.UP)) {
             return InteractionResult.PASS;
         }
 
         if (!level.isClientSide) {
             BlockState cakeState = ModBlocks.DEEPSLATE_CAKE.get()
                     .defaultBlockState()
-                    .setValue(DeepslateCakeBlock.BITES, 3);
+                    .setValue(DeepslateBlocks.Cake.BITES, 3);
             level.setBlock(placePos, cakeState, 3);
 
             if (!player.getAbilities().instabuild) {
@@ -102,7 +103,7 @@ public class DeepslateCakeSliceItem extends Item {
             float newHealth = player.getHealth() - BITE_DAMAGE;
             if (newHealth <= 0.0f) {
                 DamageSource damageSource = level.damageSources()
-                        .source(ModDamageTypes.DEEPSLATE_CAKE_SLICE, player);
+                        .source(ModRegistries.DEEPSLATE_CAKE_SLICE, player);
                 player.hurt(damageSource, BITE_DAMAGE);
             } else {
                 player.setHealth(newHealth);

@@ -2,6 +2,7 @@ package org.kaleidoscope_sculk.item;
 
 import com.github.ysbbbbbb.kaleidoscopecookery.api.event.SickleHarvestEvent;
 import com.github.ysbbbbbb.kaleidoscopecookery.block.crop.RiceCropBlock;
+import com.github.ysbbbbbb.kaleidoscopecookery.block.crop.TeaTreeBlock;
 import com.github.ysbbbbbb.kaleidoscopecookery.init.tag.TagMod;
 import com.github.ysbbbbbb.kaleidoscopecookery.item.SickleItem;
 import net.minecraft.ChatFormatting;
@@ -86,12 +87,12 @@ public class SculkBoneSickleItem extends SickleItem {
             }
         }
 
+        serverLevel.playSound(null,
+                player.getX(), player.getY(), player.getZ(),
+                SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(),
+                1.0F, 1.0F);
+        player.sweepAttack();
         if (breakCount > 0) {
-            serverLevel.playSound(null,
-                    player.getX(), player.getY(), player.getZ(),
-                    SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(),
-                    1.0F, 1.0F);
-            player.sweepAttack();
             stack.hurtAndBreak(breakCount, player, EquipmentSlot.MAINHAND);
         }
         player.getCooldowns().addCooldown(this, 7);
@@ -103,12 +104,6 @@ public class SculkBoneSickleItem extends SickleItem {
         if (blockState.isAir()) {
             return false;
         }
-
-        Block block = blockState.getBlock();
-        if (!(block instanceof BushBlock)) {
-            return false;
-        }
-
         if (!level.mayInteract(player, pos)) {
             return false;
         }
@@ -116,11 +111,22 @@ public class SculkBoneSickleItem extends SickleItem {
             return false;
         }
 
+        Block block = blockState.getBlock();
         BlockPos targetPos = pos.immutable();
 
         SickleHarvestEvent event = new SickleHarvestEvent(player, stack, targetPos, blockState);
         if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
             return event.isCostDurability();
+        }
+
+        if (block instanceof TeaTreeBlock teaTreeBlock) {
+            if (teaTreeBlock.isMaxAge(blockState)) {
+                teaTreeBlock.playerDestroy(level, player, targetPos, blockState, null, ItemStack.EMPTY);
+                level.setBlock(targetPos, teaTreeBlock.getStateForAge(0), Block.UPDATE_ALL);
+                level.levelEvent(null, LevelEvent.PARTICLES_DESTROY_BLOCK, targetPos, Block.getId(blockState));
+                return true;
+            }
+            return false;
         }
 
         if (block instanceof CropBlock cropBlock) {
@@ -143,7 +149,7 @@ public class SculkBoneSickleItem extends SickleItem {
             return false;
         }
 
-        if (player instanceof ServerPlayer serverPlayer) {
+        if (block instanceof BushBlock && player instanceof ServerPlayer serverPlayer) {
             serverPlayer.gameMode.destroyBlock(targetPos);
             level.levelEvent(null, LevelEvent.PARTICLES_DESTROY_BLOCK, targetPos, Block.getId(blockState));
             return true;

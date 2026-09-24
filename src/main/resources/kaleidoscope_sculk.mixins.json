@@ -4,6 +4,7 @@
   "package": "org.kaleidoscope_sculk.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "CookeryCropSickleMixin",
     "MobEchoTargetMixin",
     "PotionContentsMixin",
     "WardenVibrationUserMixin"

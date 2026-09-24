@@ -5,12 +5,15 @@
     "B": {
       "item": "kaleidoscope_sculk:warden_tendril"
     },
+    "E": {
+      "item": "minecraft:echo_shard"
+    },
     "T": {
       "tag": "kaleidoscope_sculk:smithing_templates"
     }
   },
   "pattern": [
-    "BBB",
+    "BEB",
     "BTB",
     "BBB"
   ],

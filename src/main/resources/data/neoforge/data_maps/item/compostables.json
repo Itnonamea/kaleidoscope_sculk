@@ -1,0 +1,12 @@
+{
+  "values": {
+    "kaleidoscope_sculk:echo_seed": {
+      "can_villager_compost": true,
+      "chance": 0.3
+    },
+    "kaleidoscope_sculk:sculk_pinapple": {
+      "can_villager_compost": true,
+      "chance": 0.65
+    }
+  }
+}

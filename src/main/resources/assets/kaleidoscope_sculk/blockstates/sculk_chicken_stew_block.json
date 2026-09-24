@@ -46,17 +46,32 @@
       "y": 270
     },
     "bites=3,facing=east": {
-      "model": "kaleidoscope_sculk:block/fungus_pot",
+      "model": "kaleidoscope_sculk:block/sculk_chicken_stew_block/sculk_chicken_stew_block_bite3",
       "y": 90
     },
     "bites=3,facing=north": {
-      "model": "kaleidoscope_sculk:block/fungus_pot"
+      "model": "kaleidoscope_sculk:block/sculk_chicken_stew_block/sculk_chicken_stew_block_bite3"
     },
     "bites=3,facing=south": {
-      "model": "kaleidoscope_sculk:block/fungus_pot",
+      "model": "kaleidoscope_sculk:block/sculk_chicken_stew_block/sculk_chicken_stew_block_bite3",
       "y": 180
     },
     "bites=3,facing=west": {
+      "model": "kaleidoscope_sculk:block/sculk_chicken_stew_block/sculk_chicken_stew_block_bite3",
+      "y": 270
+    },
+    "bites=4,facing=east": {
+      "model": "kaleidoscope_sculk:block/fungus_pot",
+      "y": 90
+    },
+    "bites=4,facing=north": {
+      "model": "kaleidoscope_sculk:block/fungus_pot"
+    },
+    "bites=4,facing=south": {
+      "model": "kaleidoscope_sculk:block/fungus_pot",
+      "y": 180
+    },
+    "bites=4,facing=west": {
       "model": "kaleidoscope_sculk:block/fungus_pot",
       "y": 270
     }

@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import org.kaleidoscope_sculk.register.ModEntities;
+import org.kaleidoscope_sculk.register.ModRegistries;
 import org.kaleidoscope_sculk.register.ModItems;
 
 public class AncientBoneFragmentProjectile extends ThrowableItemProjectile {
@@ -24,7 +24,7 @@ public class AncientBoneFragmentProjectile extends ThrowableItemProjectile {
     }
 
     public AncientBoneFragmentProjectile(Level level, LivingEntity shooter) {
-        super(ModEntities.ANCIENT_BONE_FRAGMENT_PROJECTILE.get(), shooter, level);
+        super(ModRegistries.ANCIENT_BONE_FRAGMENT_PROJECTILE.get(), shooter, level);
     }
 
     @Override
@@ -62,7 +62,6 @@ public class AncientBoneFragmentProjectile extends ThrowableItemProjectile {
         }
     }
 
-    
     private void spawnDropItem() {
         if (hasDropped) return;
         hasDropped = true;
