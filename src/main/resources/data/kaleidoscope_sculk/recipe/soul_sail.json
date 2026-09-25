@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "kaleidoscope_sculk:silent_upgrade_smithing_template"
+    },
+    "B": {
+      "tag": "minecraft:wool"
+    },
+    "C": {
+      "item": "kaleidoscope_sculk:ancient_bone_fragment"
+    },
+    "D": {
+      "tag": "minecraft:wooden_fences"
+    }
+  },
+  "pattern": [
+    "BAB",
+    "CDC",
+    " D "
+  ],
+  "result": {
+    "count": 1,
+    "id": "kaleidoscope_sculk:soul_sail"
+  }
+}
