@@ -89,7 +89,7 @@ public class ModBlocks {
                     new FoodProperties.Builder()
                             .alwaysEdible()
                             .nutrition(4)
-                            .saturationModifier(1.2f)
+                            .saturationModifier(0.6f)
                             .effect(ModBlocks::createMustardEffect, 1.0f)
                             .effect(() -> new MobEffectInstance(ModEffects.ECHO.getDelegate(), 3600, 0), 1.0f)
                             .build(),
@@ -103,7 +103,7 @@ public class ModBlocks {
                     new FoodProperties.Builder()
                             .alwaysEdible()
                             .nutrition(4)
-                            .saturationModifier(1.0f)
+                            .saturationModifier(0.6f)
                             .effect(() -> new MobEffectInstance(WARMTH.getDelegate(), 6000, 0), 1.0f)
                             .effect(() -> new MobEffectInstance(ModEffects.ECHO.getDelegate(), 2400, 0), 1.0f)
                             .build(),
@@ -117,7 +117,7 @@ public class ModBlocks {
                     new FoodProperties.Builder()
                             .alwaysEdible()
                             .nutrition(5)
-                            .saturationModifier(1.3f)
+                            .saturationModifier(0.6f)
                             .effect(() -> new MobEffectInstance(WARMTH.getDelegate(), 2400, 0), 1.0f)
                             .effect(() -> new MobEffectInstance(ModEffects.ECHO.getDelegate(), 3600, 0), 1.0f)
                             .build(),
@@ -131,7 +131,7 @@ public class ModBlocks {
                     new FoodProperties.Builder()
                             .alwaysEdible()
                             .nutrition(4)
-                            .saturationModifier(1.2f)
+                            .saturationModifier(0.6f)
                             .effect(() -> new MobEffectInstance(ModEffects.SCULK_DASH.getDelegate(), 6000, 0), 1.0f)
                             .effect(() -> new MobEffectInstance(ModEffects.SONIC_WAVE.getDelegate(), 2400, 2), 1.0f)
                             .build(),
@@ -145,7 +145,7 @@ public class ModBlocks {
                     new FoodProperties.Builder()
                             .alwaysEdible()
                             .nutrition(4)
-                            .saturationModifier(1.1f)
+                            .saturationModifier(0.6f)
                             .effect(() -> new MobEffectInstance(ModEffects.SONIC_WAVE.getDelegate(), 3600, 4), 1.0f)
                             .build(),
                     4,

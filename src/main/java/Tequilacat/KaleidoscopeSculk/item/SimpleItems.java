@@ -159,7 +159,7 @@ public final class SimpleItems {
             int maxBites = Math.max(1, foodBite.getMaxBites());
             return new FoodProperties(
                     biteFood.nutrition() * maxBites,
-                    biteFood.saturation(),
+                    biteFood.saturation() * maxBites,
                     biteFood.canAlwaysEat(),
                     biteFood.eatSeconds(),
                     Optional.empty(),
